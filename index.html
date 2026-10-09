@@ -207,6 +207,18 @@
   .a-fut .st .sv{font-size:24px}
   .a-vix .ph{margin-bottom:6px}
   .a-vix .note{margin-top:6px}
+
+  /* ===== Commodities panel ===== */
+  .cmd{display:flex;flex-direction:column}
+  .cr{display:grid;grid-template-columns:1fr auto 104px;align-items:baseline;gap:12px;padding:4px 0;border-bottom:1px solid var(--line)}
+  .cr:last-child{border-bottom:none}
+  .cr .cn{color:var(--muted);font-size:23px;white-space:nowrap}
+  .cr .cn sup{color:var(--dim);font-size:14px;margin-left:2px}
+  .cr .cv{font-size:27px;font-weight:700;white-space:nowrap}
+  .cr .cc{font-size:20px;font-weight:600;text-align:right;white-space:nowrap}
+  .cr .na3{color:var(--dim);font-size:16px;font-style:italic;text-align:right}
+  .a-cmd .note{margin-top:6px;font-size:20px;line-height:1.3}
+  .a-cmd .csrc{color:var(--dim);font-size:15px;margin-top:6px;line-height:1.3}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style id="fitcss">html,body{margin:0}</style>
@@ -282,11 +294,12 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div class="bias"><div class="idx">Dow<span class="tick">US30</span></div><span class="pill bearish">Bearish</span><div class="why">Weakest futures, most exposed to yields and oil.</div></div><div class="bias"><div class="idx">Nasdaq<span class="tick">NAS100</span></div><span class="pill bearish">Bearish</span><div class="why">AI-financing worries and soft chip names.</div></div><div class="bias"><div class="idx">S&amp;P<span class="tick">SPX</span></div><span class="pill bearish">Bearish</span><div class="why">Under yesterday&#x27;s close, VIX rising.</div></div></div>
     </section>
 
-    <section class="panel a-oil span2 kpi">
-      <div class="ph">Oil</div>
-      <div class="row"><span class="k">Brent <span class="chg up">+4.4%</span></span><span class="v mono">~$104.6</span></div>
-      <div class="row"><span class="k">WTI</span><span class="v mono">~$92.2</span></div>
-      <div class="note">Iran-strike reports, new tanker attacks, and Hurricane Isaias shutting about a quarter of US Gulf oil output.</div>
+    <!-- Commodities panel (Row 1 slot, span 4). Rows from JSON commodities[]; Brent + WTI required. -->
+    <section class="panel a-oil a-cmd">
+      <div class="ph">Commodities</div>
+      <div class="cmd"><div class="cr"><span class="cn">Brent</span><span class="cv mono">~$104.6</span><span class="cc up">+4.4%</span></div><div class="cr"><span class="cn">WTI</span><span class="cv mono">~$92.2</span><span></span></div><div class="cr"><span class="cn">Gold<sup>*</sup></span><span class="cv mono">$4,122.12</span><span class="cc up">+0.3%</span></div><div class="cr"><span class="cn">Silver<sup>*</sup></span><span class="cv mono">$58.80</span><span class="cc down">−2.2%</span></div></div>
+      <div class="note">Oil: Iran-strike reports, new tanker attacks, and Hurricane Isaias shutting about a quarter of US Gulf oil output.</div>
+      <div class="csrc">* Not in the brief: Reuters spot, 11:28 GMT (13:28 SAST).</div>
     </section>
 
     <section class="panel a-ust span2 kpi">
