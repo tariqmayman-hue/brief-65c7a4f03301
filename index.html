@@ -539,7 +539,18 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
 
   /* ===== Compact session clock in the nav (between brand and Menu). The Menu button keeps its fixed width/position. ===== */
   html:not(.wd) .a-clock{display:none}            /* the board's big clock strip is only for the PNG / nav-less card */
-  .appnav .nclk{flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:12px;overflow:hidden;white-space:nowrap;font-size:13px;color:#8fa1bf}
+  .appnav .nclk{flex:1 1 0;min-width:0;box-sizing:border-box;display:flex;align-items:center;justify-content:flex-start;gap:12px;overflow:hidden;white-space:nowrap;font-size:13px;color:#8fa1bf}
+  /* Fit levels (set by fitClock() in JS, cumulative): the clock is centred on the viewport where space allows; when its parts would come within 16px
+     of the logo or the Menu button, lower-priority parts drop in this order: f1 countdown label, f2 off-session chips, f3 seconds + SAST,
+     f4 short DST badge, f5 short countdown, f6 countdown, f7 DST badge, f8 chips. The time is never hidden. */
+  .appnav .nclk.f1 .ncd .lb,.appnav .nclk.f1 .ncd .lo{display:none} .appnav .ncd .sh{display:none} .appnav .nclk.f1 .ncd .sh{display:inline}
+  .appnav .nclk.f2 .nchips i:not(.on):not(.pre){display:none}
+  .appnav .nclk.f3 .nt .s,.appnav .nclk.f3 .nt .z{display:none}
+  .appnav .nclk.f4 .ndst.pc{display:none} .appnav .nclk.f4 .ndst.ph{display:inline-block}
+  .appnav .nclk.f5 .ncd .iw,.appnav .nclk.f5 .ncd .lp{display:none}
+  .appnav .nclk.f6 .ncd{display:none}
+  .appnav .nclk.f7 .ndst{display:none!important}
+  .appnav .nclk.f8 .nchips{display:none}
   .appnav .mb{margin-left:0}
   .appnav .nclk .nt{font-family:"IBM Plex Mono",ui-monospace,monospace;color:#e8eef8;font-size:17px;font-weight:700;letter-spacing:-.3px;flex:none}
   .appnav .nclk .nt .s{color:#8fa1bf;font-size:13px;font-weight:600}
@@ -553,7 +564,7 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   .appnav .ndst.ph{display:none}
   .appnav .ndst.mm{color:#1b1300;background:#f5b942;border-color:#f5b942}
   .appnav .ndst.off{color:#8fa1bf}
-  .appnav .ncd{font-size:13px;color:#8fa1bf;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .appnav .ncd{font-size:13px;color:#8fa1bf;flex:none}
   .appnav .ncd .lb{color:#8fa1bf}
   .appnav .ncd b{color:#e8eef8;font-weight:700}
   .appnav .ncd .t{color:#e8eef8;font-weight:600;font-variant-numeric:tabular-nums}
@@ -595,8 +606,6 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
     .appnav .ntl .tk{font-size:8.5px}
     .appnav .ntl .mk b{font-size:9px;padding:0 4px}
   }
-  @media (max-width:1000px){.appnav .nclk .nt .s,.appnav .nclk .nt .z{display:none}.appnav .ncd .lb{display:none}}
-  @media (max-width:760px){.appnav .nchips i:not(.on):not(.pre){display:none}}
   @media (max-width:600px){
     /* Phones: row 1 = logo + AMIT and the fixed 220px Menu button (same position as before); row 2 = slim session-clock bar.
        The clock no longer fits beside the Menu button at 360px with explicit DST text and the NY PRE chip, so it gets its own row. */
@@ -606,10 +615,11 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
     .appnav .menu{left:12px;right:12px;width:auto;top:94px;max-height:calc(100vh - 104px)}
     .appnav .menu a{padding:13px 12px;font-size:16px}
     .appnav .nclk{order:3;flex:0 0 calc(100% + 24px);box-sizing:border-box;height:30px;margin:9px -12px 0;padding:0 12px;border-top:1px solid #1f2f4d;
-      background:#0b1528;justify-content:center;gap:10px;font-size:12px}
+      background:#0b1528;gap:10px;font-size:12px}
     .appnav .nclk .nt{font-size:14px}
     .appnav .nclk .nt .z{display:inline;font-size:9px;margin-left:3px}
-    .appnav .ndst.ph{display:none!important}
+    .appnav .nclk .nt .s,.appnav .ncd .lb,.appnav .nchips i:not(.on):not(.pre){display:none}   /* phone base: no seconds, no countdown label, lit chips only */
+    .appnav .ncd .lo{display:none} .appnav .ncd .sh{display:inline}
     .appnav .ndst{font-size:10px;padding:1px 6px;letter-spacing:.5px}
     .appnav .ncd{font-size:12px}
     .appnav .nchips i{font-size:10px;padding:1px 6px;letter-spacing:.6px}
@@ -698,13 +708,32 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
     dph.title=dst.title='UK: '+(bst?'BST (summer)':'GMT (winter)')+' · US: '+(edt?'EDT (summer)':'EST (winter)')+(mm?' · DST mismatch: London–NY open gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(ses.n[0]-ses.l[0])+' (normally 6h30)':'');
     var live=null,nx=null; HARD.forEach(function(x){if(now>=x.t-2*M&&now<x.t+30*M)live=x;else if(x.t>now&&(!nx||x.t<nx.t))nx=x;});
     var cd=q('.ncd'); cd.className='ncd'+(live?' live':'');
-    var ph=innerWidth<=600;
-    if(live){cd.innerHTML='<span class="lb">HARD: </span><b>'+esc(live.n)+'</b> <span class="t">LIVE / just passed</span>';cd.title='LIVE / just passed: '+live.n+' '+hm(live.t)+' SAST';}
-    else if(nx){cd.innerHTML='<span class="lb">Next HARD: </span><b>'+esc(nx.n)+'</b> in <span class="t">'+dur(nx.t-now)+'</span>';cd.title='Next HARD: '+nx.n+', '+ds(nx.t)+' '+hm(nx.t)+' SAST';}
-    else {cd.innerHTML=ph?'No HARD left':'No timed HARD event left';cd.title='No upcoming timed HARD event in this brief';}
+    if(live){cd.innerHTML='<span class="lb">HARD: </span><b>'+esc(live.n)+'</b> <span class="t">LIVE<span class="lp"> / just passed</span></span>';cd.title='LIVE / just passed: '+live.n+' '+hm(live.t)+' SAST';}
+    else if(nx){cd.innerHTML='<span class="lb">Next HARD: </span><b>'+esc(nx.n)+'</b><span class="iw"> in</span> <span class="t">'+dur(nx.t-now)+'</span>';cd.title='Next HARD: '+nx.n+', '+ds(nx.t)+' '+hm(nx.t)+' SAST';}
+    else {cd.innerHTML='<span class="lo">No timed HARD event left</span><span class="sh">No HARD left</span>';cd.title='No upcoming timed HARD event in this brief';}
     c.title='SAST '+hm(now)+' · '+(open.length?open.join(', ')+' open':'No main session open');
+    fit();
+  }
+  /* Keep every clock part >= 16px clear of the logo and the Menu button: try fit levels f0..f8 (see CSS) until the visible parts fit,
+     then centre them on the viewport, clamped into the free space. On phones (own row) the free space is the row. */
+  var nav=document.querySelector('.appnav'), mbE=nav.querySelector('.mb'), nbE=nav.querySelector('.nb'), G=16;
+  function fit(){
+    var lv=0, base='nclk', parts=c.querySelectorAll('.nt,.ndst,.ncd,.nchips');
+    c.style.paddingLeft='0px';
+    for(;lv<=8;lv++){
+      var cls=base; for(var k=1;k<=lv;k++) cls+=' f'+k; c.className=cls;
+      var L0=1e9,R0=-1e9; [].forEach.call(parts,function(e){var r=e.getBoundingClientRect(); if(r.width>0){L0=Math.min(L0,r.left);R0=Math.max(R0,r.right);}});
+      var w=R0-L0, cr=c.getBoundingClientRect(), m=mbE.getBoundingClientRect(), bq=nbE.getBoundingClientRect(), L, R;
+      if(cr.top<m.bottom&&cr.bottom>m.top){L=bq.right+G;R=m.left-G;}             /* same row as the Menu button (PC) */
+      else {var cs=getComputedStyle(c);L=cr.left+parseFloat(cs.borderLeftWidth)+12;R=cr.right-12;}  /* own row (phones) */
+      if(w<=R-L-1||lv===8){
+        var vw=document.documentElement.clientWidth, x=Math.max(L,Math.min(R-w,vw/2-w/2));
+        c.style.paddingLeft=Math.max(0,Math.round(x-L0))+'px'; break;
+      }
+    }
   }
   draw(); setInterval(draw,1000);
+  addEventListener('resize',fit); if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
 })();
 </script>
 
@@ -829,7 +858,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
       <div class="ph">Catalysts &amp; event risk <span class="src">times SAST</span></div>
       <div class="tl"><div class="grp">Today · Fri 9 Oct</div><div class="ev"><div class="t mono">Pre-open</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Delta earnings (reported)</b><span>EPS $1.72 vs $1.75 expected; outlook cut on fuel. Shares about −4%.</span></div></div><div class="ev"><div class="t mono">14:30</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Canada jobs (Sept)</b><span>Moves CAD.</span></div></div><div class="ev"><div class="t mono">15:30</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Cash open</b></div></div><div class="ev"><div class="t mono">16:00</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>UMich sentiment (prelim)</b><span>Consensus 47.6 vs 48.1. Watch inflation expectations.</span></div></div><div class="ev"><div class="t mono">22:00</div><div><span class="tag hard">HARD</span></div><div class="d"><b>Collins speaks (Boston Fed)</b><span>Policy Fed speech at the cash close. Don&#x27;t enter right before it.</span></div></div><div class="grp">Later</div><div class="ev"><div class="t mono"><small>Weekend</small>TBC</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Iran&#x27;s reply on Hormuz</b><span>Due within days. Oil gap risk.</span></div></div><div class="ev"><div class="t mono"><small>Mon 12 Oct</small>TBC</div><div><span class="tag hard">HARD</span></div><div class="d"><b>Hammack speaks (Dallas Fed)</b><span>Time not confirmed. Columbus Day: cash Treasuries shut.</span></div></div><div class="ev"><div class="t mono"><small>Tue 13 Oct</small>TBC</div><div><span class="tag conditional">CONDITIONAL</span></div><div class="d"><b>ADP employment (4-week avg)</b><span>Bank earnings start pre-open (JPMorgan, Goldman, Wells Fargo).</span></div></div><div class="ev"><div class="t mono"><small>Wed 14 Oct</small>14:30</div><div><span class="tag hard">HARD</span></div><div class="d"><b>CPI (Sept)</b><span>CMC consensus: headline +0.6% m/m, core +0.2% m/m.</span></div></div><div class="ev"><div class="t mono"><small>Thu 15 Oct</small>14:30</div><div><span class="tag conditional">CONDITIONAL</span></div><div class="d"><b>PPI, core PPI and retail sales (Sept)</b><span>Retail sales time not confirmed. Philly Fed, TSMC also.</span></div></div><div class="ev"><div class="t mono"><small>Wed 28 Oct</small>20:00</div><div><span class="tag hard">HARD</span></div><div class="d"><b>FOMC decision (27-28 Oct)</b><span>Usual 2:00 pm ET time; press conference also HARD.</span></div></div></div>
       <div class="legend">HARD = do not enter right before the event · CONDITIONAL = act only if the stated condition holds · WATCH = scheduled / for information</div>
-      <div class="callout"><div class="cl">Key note</div>HARD event today: Collins (policy Fed speech) at 22:00 SAST, so don&#x27;t enter right before it. UMich at 16:00 is WATCH only: its inflation expectations feed Fed hike odds.</div>
+      <div class="callout"><div class="cl">Key note</div>HARD event today: Collins (policy Fed speech) at 22:00 SAST. UMich at 16:00 is WATCH only: its inflation expectations feed Fed hike odds.</div>
     </section>
     <div class="stack a-stack">
       <section class="panel a-drv">
@@ -859,7 +888,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
     <!--DESK--><!-- ===== Desk notes (hidden automatically when the brief has none) ===== -->
     <section class="panel a-desk">
       <div class="ph">Desk notes</div>
-      <div class="desk"><div class="dn wide"><div class="dh"><span class="dt">FX (DINERO)</span></div><ul class="b"><li>The dollar is softer against the euro and sterling but firmer against the yen. EUR/USD 1.1232, GBP/USD 1.3245, USD/JPY 158.34 (AFP, ~10:10 SAST).</li><li>The dollar index settled Thursday at 102.14 (−0.10%). Canada jobs at 14:30 SAST test a crowded short in CAD (CFTC positioning, week of 29 Sept).</li></ul></div><div class="dn wide"><div class="dh"><span class="dt">Cross-asset (NEXUS)</span></div><ul class="b"><li>Lower oil, flat yields, a softer dollar, higher gold and Nasdaq futures up all point the same way: a relief bounce, not a new trend.</li><li>What would break it: oil back above Thursday&#x27;s $104 settle, the 10Y back toward 5.364%, or a hawkish Collins.</li></ul></div></div>
+      <div class="desk"><div class="dn wide"><div class="dh"><span class="dt">FX (DINERO)</span></div><ul class="b"><li>The dollar is softer against the euro and sterling but firmer against the yen. EUR/USD 1.1232, GBP/USD 1.3245, USD/JPY 158.34 (AFP, ~10:10 SAST).</li><li>The dollar index settled Thursday at 102.14 (−0.10%). Canada jobs at 14:30 SAST test a crowded short in CAD (CFTC positioning, week of 29 Sept).</li></ul></div><div class="dn wide"><div class="dh"><span class="dt">Cross-asset (NEXUS)</span></div><ul class="b"><li>Lower oil, flat yields, a softer dollar, higher gold and Nasdaq futures up describe a relief bounce, not a new trend.</li><li>What would break it: oil back above Thursday&#x27;s $104 settle, the 10Y back toward 5.364%, or a hawkish Collins.</li></ul></div></div>
     </section><!--/DESK-->
 
     <!-- ===== Row 5: Invalidation | Bottom line ===== -->
@@ -869,7 +898,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
     </section>
     <section class="panel a-bl inval">
       <div class="ph">Bottom line</div>
-      <p>Boss, today is a Neutral relief bounce: lower oil and an AI rebound are lifting futures, but the 10Y near 5.24% and an ~83% priced December hike cap the upside, so lean neutral-to-bullish Nasdaq and neutral Dow and S&amp;P. Key HARD event: Collins (Boston Fed) at 22:00 SAST, so don&#x27;t enter right before it; CPI next Wed 14 Oct at 14:30 SAST.</p>
+      <p>Boss, today is a Neutral relief bounce: lower oil and an AI rebound are lifting futures, but the 10Y near 5.24% and an ~83% priced December hike cap the upside, so lean neutral-to-bullish Nasdaq and neutral Dow and S&amp;P. Key HARD event: Collins (Boston Fed) at 22:00 SAST; CPI next Wed 14 Oct at 14:30 SAST.</p>
     </section>
   </div>
 
