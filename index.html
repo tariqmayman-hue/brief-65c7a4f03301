@@ -544,15 +544,17 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   .appnav .nclk{flex:1 1 0;min-width:0;box-sizing:border-box;display:flex;align-items:center;justify-content:flex-start;gap:12px;overflow:hidden;white-space:nowrap;font-size:13px;color:#8fa1bf}
   /* Fit levels (set by fitClock() in JS, cumulative): the clock is centred on the viewport where space allows; when its parts would come within 16px
      of the logo or the Menu button, lower-priority parts drop in this order: f1 countdown label, f2 off-session chips, f3 seconds + SAST,
-     f4 short DST badge, f5 short countdown, f6 countdown, f7 DST badge, f8 chips. The time is never hidden. */
+     f4 short DST badge ('EU ON · US ON'), f5 short countdown, f6 shortest DST badge ('EU/US ON'), f7 countdown, f8 DST badge, f9 chips.
+     The time is never hidden. DST badge: full 'Europe DST Active · US DST Active' (amber when Europe and US differ). */
   .appnav .nclk.f1 .ncd .lb,.appnav .nclk.f1 .ncd .lo{display:none} .appnav .ncd .sh{display:none} .appnav .nclk.f1 .ncd .sh{display:inline}
   .appnav .nclk.f2 .nchips i:not(.on):not(.pre){display:none}
   .appnav .nclk.f3 .nt .s,.appnav .nclk.f3 .nt .z{display:none}
   .appnav .nclk.f4 .ndst.pc{display:none} .appnav .nclk.f4 .ndst.ph{display:inline-block}
   .appnav .nclk.f5 .ncd .iw,.appnav .nclk.f5 .ncd .lp{display:none}
-  .appnav .nclk.f6 .ncd{display:none}
-  .appnav .nclk.f7 .ndst{display:none!important}
-  .appnav .nclk.f8 .nchips{display:none}
+  .appnav .nclk.f6 .ndst.ph{display:none!important} .appnav .nclk.f6 .ndst.xs{display:inline-block}
+  .appnav .nclk.f7 .ncd{display:none}
+  .appnav .nclk.f8 .ndst{display:none!important}
+  .appnav .nclk.f9 .nchips{display:none}
   .appnav .mb{margin-left:0}
   .appnav .nclk .nt{font-family:"IBM Plex Mono",ui-monospace,monospace;color:#e8eef8;font-size:17px;font-weight:700;letter-spacing:-.3px;flex:none}
   .appnav .nclk .nt .s{color:#8fa1bf;font-size:13px;font-weight:600}
@@ -563,7 +565,7 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   .appnav .nchips i.on{color:#06202e;background:#4cc3ff;border-color:#4cc3ff;box-shadow:0 0 8px rgba(76,195,255,.45)}
   .appnav .nchips i.pre{color:#1b1300;background:#f5b942;border-color:#f5b942;box-shadow:0 0 8px rgba(245,185,66,.45)}   /* NY pre-market */
   .appnav .ndst{font-size:11px;font-weight:700;letter-spacing:.8px;color:#c9d2e3;border:1px solid #1f2f4d;border-radius:5px;padding:2px 7px;background:#0d182c;flex:none}
-  .appnav .ndst.ph{display:none}
+  .appnav .ndst.ph,.appnav .ndst.xs{display:none}
   .appnav .ndst.mm{color:#1b1300;background:#f5b942;border-color:#f5b942}
   .appnav .ndst.off{color:#8fa1bf}
   .appnav .ncd{font-size:13px;color:#8fa1bf;flex:none}
@@ -636,7 +638,7 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   <div class="in">
     <a class="nb" href="index.html" aria-label="AMIT Main Board"><img src="logo.png" alt=""><span class="w">AMIT</span></a>
     <div class="nclk" aria-label="Session clock (SAST)">
-      <span class="nl1"><span class="nt"><span class="hm">--:--</span><span class="s"></span><span class="z">SAST</span></span><span class="ndst ph"></span><span class="nchips"><i data-k="a">Asia</i><i data-k="l">LDN</i><i data-k="n">NY</i></span><span class="ndst pc"></span></span>
+      <span class="nl1"><span class="nt"><span class="hm">--:--</span><span class="s"></span><span class="z">SAST</span></span><span class="ndst ph"></span><span class="ndst xs"></span><span class="nchips"><i data-k="a">Asia</i><i data-k="l">LDN</i><i data-k="n">NY</i></span><span class="ndst pc"></span></span>
       <span class="nl2"><span class="ncd"></span></span>
     </div>
     <script type="application/json" class="nclk-data">[{"name": "Collins", "at": "2026-10-09T22:00:00+02:00"}, {"name": "CPI", "at": "2026-10-14T14:30:00+02:00"}, {"name": "FOMC", "at": "2026-10-28T20:00:00+02:00"}]</script>
@@ -653,7 +655,7 @@ document.addEventListener('click',function(e){if(!n.contains(e.target))set(false
 document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
 </script>
 <script>
-/* Nav session clock (live, SAST). DST from the date: UK BST = last Sun Mar..last Sun Oct (01:00 UTC); US EDT = 2nd Sun Mar 07:00 UTC..1st Sun Nov 06:00 UTC.
+/* Nav session clock (live, SAST). DST from the date: Europe (EU + UK) summer time = last Sun Mar..last Sun Oct (01:00 UTC); US EDT = 2nd Sun Mar 07:00 UTC..1st Sun Nov 06:00 UTC.
    Sessions in SAST: Asia (Tokyo) 02:00-08:00; NY Pre-market 14:00-15:30 (EDT) / 15:00-16:30 (EST); London 09:00-17:30 (BST) / 10:00-18:30 (GMT); NY cash 15:30-22:00 (EDT) / 16:30-23:00 (EST).
    Countdown to the next timed HARD event of the day's brief (events[].at). The nav is hidden under webdriver, so this never shows on the PNG. */
 (function(){
@@ -704,10 +706,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
       var nb=tl.querySelector('.now b'); [].forEach.call(tl.querySelectorAll('.hdm'),function(m){var a=m.querySelector('b').getBoundingClientRect(),b=nb.getBoundingClientRect();
         if(a.left<b.right+6&&a.right>b.left-6)m.classList.add('bot');});
     }
-    var mm=bst!==edt, dst=q('.ndst.pc'), dph=q('.ndst.ph');
-    dst.textContent=mm?'DST Mismatch':(bst?'DST Active':'DST Inactive'); dph.textContent=mm?'DST MISMATCH':(bst?'DST ON':'DST OFF');
-    [dst,dph].forEach(function(x){x.classList.toggle('mm',mm);x.classList.toggle('off',!mm&&!bst);});
-    dph.title=dst.title='UK: '+(bst?'BST (summer)':'GMT (winter)')+' · US: '+(edt?'EDT (summer)':'EST (winter)')+(mm?' · DST mismatch: London–NY open gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(ses.n[0]-ses.l[0])+' (normally 6h30)':'');
+    /* DST badge per region: full 'Europe DST Active · US DST Active'; short 'EU ON · US ON'; shortest 'EU/US ON' (or 'EU OFF/US ON' when they differ). Amber when they differ. */
+    var mm=bst!==edt, dst=q('.ndst.pc'), dph=q('.ndst.ph'), dxs=q('.ndst.xs'), oo=function(v){return v?'ON':'OFF';};
+    dst.textContent='Europe DST '+(bst?'Active':'Inactive')+' · US DST '+(edt?'Active':'Inactive');
+    dph.textContent='EU '+oo(bst)+' · US '+oo(edt);
+    dxs.textContent=mm?'EU '+oo(bst)+'/US '+oo(edt):'EU/US '+oo(bst);
+    [dst,dph,dxs].forEach(function(x){x.classList.toggle('mm',mm);x.classList.toggle('off',!mm&&!bst);});
+    dxs.title=dph.title=dst.title='Europe: '+(bst?'summer time (BST/CEST)':'winter time (GMT/CET)')+' · US: '+(edt?'EDT (summer)':'EST (winter)')+(mm?' · DST mismatch: London–NY open gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(ses.n[0]-ses.l[0])+' (normally 6h30)':'');
     var live=null,nx=null; HARD.forEach(function(x){if(now>=x.t-2*M&&now<x.t+30*M)live=x;else if(x.t>now&&(!nx||x.t<nx.t))nx=x;});
     var cd=q('.ncd'); cd.className='ncd'+(live?' live':'');
     if(live){cd.innerHTML='<span class="lb">HARD: </span><b>'+esc(live.n)+'</b> <span class="t">LIVE<span class="lp"> / just passed</span></span>';cd.title='LIVE / just passed: '+live.n+' '+hm(live.t)+' SAST';}
@@ -716,19 +721,19 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
     c.title='SAST '+hm(now)+' · '+(open.length?open.join(', ')+' open':'No main session open');
     fit();
   }
-  /* Keep every clock part >= 16px clear of the logo and the Menu button: try fit levels f0..f8 (see CSS) until the visible parts fit,
+  /* Keep every clock part >= 16px clear of the logo and the Menu button: try fit levels f0..f9 (see CSS) until the visible parts fit,
      then centre them on the viewport, clamped into the free space. On phones (own row) the free space is the row. */
   var nav=document.querySelector('.appnav'), mbE=nav.querySelector('.mb'), nbE=nav.querySelector('.nb'), G=16;
   function fit(){
     var lv=0, base='nclk', parts=c.querySelectorAll('.nt,.ndst,.ncd,.nchips');
     c.style.paddingLeft='0px';
-    for(;lv<=8;lv++){
+    for(;lv<=9;lv++){
       var cls=base; for(var k=1;k<=lv;k++) cls+=' f'+k; c.className=cls;
       var L0=1e9,R0=-1e9; [].forEach.call(parts,function(e){var r=e.getBoundingClientRect(); if(r.width>0){L0=Math.min(L0,r.left);R0=Math.max(R0,r.right);}});
       var w=R0-L0, cr=c.getBoundingClientRect(), m=mbE.getBoundingClientRect(), bq=nbE.getBoundingClientRect(), L, R;
       if(cr.top<m.bottom&&cr.bottom>m.top){L=bq.right+G;R=m.left-G;}             /* same row as the Menu button (PC) */
       else {var cs=getComputedStyle(c);L=cr.left+parseFloat(cs.borderLeftWidth)+12;R=cr.right-12;}  /* own row (phones) */
-      if(w<=R-L-1||lv===8){
+      if(w<=R-L-1||lv===9){
         var vw=document.documentElement.clientWidth, x=Math.max(L,Math.min(R-w,vw/2-w/2));
         c.style.paddingLeft=Math.max(0,Math.round(x-L0))+'px'; break;
       }
@@ -910,7 +915,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
   </footer>
 </div>
 <script>
-/* Session clock + HARD countdown. DST is computed from the date (UK: last Sun Mar - last Sun Oct, 01:00 UTC;
+/* Session clock + HARD countdown. DST is computed from the date (Europe (EU + UK): last Sun Mar - last Sun Oct, 01:00 UTC;
    US Eastern: 2nd Sun Mar 07:00 UTC - 1st Sun Nov 06:00 UTC). Sessions are derived in SAST (UTC+2, no DST).
    Under navigator.webdriver (PNG) everything is drawn once at the brief time, with no timers. */
 (function(){
@@ -964,13 +969,14 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
     /* overlay spans only the track column */
     var tr=tb.querySelector('.tl-track'), ov=tb.querySelector('.tl-ov');
     if(tr){var bl=tb.getBoundingClientRect(), r=tr.getBoundingClientRect(), z=bl.width/tb.offsetWidth||1; ov.style.left=((r.left-bl.left)/z)+'px';}
-    var b=['<span class="db">UK: <b>'+(bst?'BST (summer)':'GMT (winter)')+'</b></span>',
-           '<span class="db">US: <b>'+(edt?'EDT (summer)':'EST (winter)')+'</b></span>',
-           '<span class="db nx">UK → '+(bst?'GMT':'BST')+' '+dayStr(U.next)+'</span>',
-           '<span class="db nx">US → '+(edt?'EST':'EDT')+' '+dayStr(E.next)+'</span>'];
+    var act=function(v){return v?'Active':'Inactive';};
+    var b=['<span class="db" title="Europe: '+(bst?'summer time (BST/CEST)':'winter time (GMT/CET)')+'">Europe DST <b>'+act(bst)+'</b></span>',
+           '<span class="db" title="US: '+(edt?'EDT (summer)':'EST (winter)')+'">US DST <b>'+act(edt)+'</b></span>',
+           '<span class="db nx">Europe DST '+(bst?'ends':'starts')+' '+dayStr(U.next)+'</span>',
+           '<span class="db nx">US DST '+(edt?'ends':'starts')+' '+dayStr(E.next)+'</span>'];
     if(bst!==edt){
       var until=Math.min(U.next,E.next);
-      b.push('<span class="db mm">DST mismatch: UK on '+(bst?'BST':'GMT')+', US on '+(edt?'EDT':'EST')+' until '+dayStr(until)+' · London–NY gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(S[3].a-S[1].a)+' (normally 6h30)'+'</span>');
+      b.push('<span class="db mm">DST mismatch: Europe DST '+act(bst)+' · US DST '+act(edt)+' until '+dayStr(until)+' · London–NY gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(S[3].a-S[1].a)+' (normally 6h30)'+'</span>');
     } else {
       var n1=Math.min(U.next,E.next), n2=Math.max(U.next,E.next);
       if(n1-now<21*24*H && n2-n1>H) b.push('<span class="db mmsoon">Mismatch window ahead: '+dayStr(n1)+' – '+dayStr(n2)+'</span>');
