@@ -175,16 +175,31 @@
     animation:lgIn .8s cubic-bezier(.2,.8,.2,1) .1s forwards, glow 1.4s ease-in-out .7s 1 both}
   #splash .wm{overflow:hidden;font-family:"IBM Plex Sans",Arial,sans-serif;color:#e8eef8;font-weight:700;font-size:46px;letter-spacing:14px;padding-left:14px}
   #splash .wm .wi{display:inline-flex;flex-wrap:wrap;justify-content:center;transform:translateY(110%);animation:wmIn .6s cubic-bezier(.2,.8,.2,1) .65s forwards}
-  /* Phase 2 (after the logo sequence): letters spread and expand into "Ai Market Intelligence Terminal" */
-  #splash .wm .w{display:inline-flex;white-space:nowrap;margin-right:0;transition:margin .4s cubic-bezier(.2,.8,.2,1)}
-  #splash .wm .cap{letter-spacing:14px;transition:letter-spacing .4s cubic-bezier(.2,.8,.2,1)}
-  #splash .wm .rest{display:inline-block;max-width:0;opacity:0;overflow:hidden;font-weight:500;letter-spacing:1px;vertical-align:bottom;
-    transition:max-width .55s cubic-bezier(.3,.7,.2,1),opacity .4s ease;transition-delay:calc(.08s + var(--d,0) * .08s)}
-  #splash.expand .wm{padding-left:0;max-width:94vw}
-  #splash.expand .wm .w{margin:0 .14em}
+  /* Phase 2 (after the logo sequence): capitals glide apart while the pre-measured lowercase spans grow
+     ("Ai Market Intelligence Terminal"). JS does a FLIP: it measures the final layout (incl. phone wrap), then animates
+     every word's position, each lowercase span's width, the container size, font-size and letter-spacing together with one
+     easing, so all lengths move in lock-step: no snapping, no reflow jumps. */
+  #splash .wm .w{display:inline-flex;white-space:nowrap}
+  #splash .wm .cap{letter-spacing:14px}
+  #splash .wm .rest{display:inline-block;width:0;opacity:0;filter:blur(6px);overflow:hidden;white-space:nowrap;font-weight:500;letter-spacing:1px;vertical-align:bottom}
+  /* final layout (used for measuring, and as the static state under reduced motion) */
+  #splash.final .wm{padding-left:0}
+  #splash.final .wm .wi{max-width:92vw}
+  #splash.final .wm .w{margin:0 .14em}
+  #splash.final .wm .cap{letter-spacing:1px}
+  #splash.final .wm .rest{width:auto;opacity:1;filter:none}
+  /* animated run */
+  #splash.flip .wm .wi{position:relative;display:block}
+  #splash.flip .wm .w{position:absolute;margin:0}
+  #splash.tr .wm{transition:font-size 1s cubic-bezier(.65,0,.35,1),padding 1s cubic-bezier(.65,0,.35,1)}
+  #splash.tr .wm .wi{transition:width 1s cubic-bezier(.65,0,.35,1),height 1s cubic-bezier(.65,0,.35,1)}
+  #splash.tr .wm .w{transition:left 1s cubic-bezier(.65,0,.35,1),top 1s cubic-bezier(.65,0,.35,1)}
+  #splash.tr .wm .cap{transition:letter-spacing 1s cubic-bezier(.65,0,.35,1)}
+  #splash.tr .wm .rest{transition:width 1s cubic-bezier(.65,0,.35,1),opacity .55s ease calc(.1s + var(--d,0) * .08s),filter .65s ease calc(.05s + var(--d,0) * .08s)}
+  #splash.expand .wm{padding-left:0}
   #splash.expand .wm .cap{letter-spacing:1px}
-  #splash.expand .wm .rest{max-width:8em;opacity:1}
-  @media (max-width:700px){ #splash.expand .wm{font-size:34px;line-height:1.2;transition:font-size .5s ease} }
+  #splash.expand .wm .rest{opacity:1;filter:blur(0)}
+  @media (max-width:700px){ #splash.final .wm,#splash.expand .wm{font-size:34px;line-height:1.2} }
   #splash .tg{font-family:"IBM Plex Sans",Arial,sans-serif;color:#8fa1bf;font-size:16px;letter-spacing:5px;text-transform:uppercase;opacity:0;animation:fadeIn .5s ease .95s forwards}
   #splash .ln{width:0;height:2px;background:#4cc3ff;animation:lnIn .7s ease .85s forwards}
   @keyframes lgIn{to{opacity:1;transform:scale(1)}}
@@ -196,7 +211,6 @@
   .anim.reveal .banner,.anim.reveal .panel,.anim.reveal .foot{animation:upIn .55s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i,0) * 55ms)}
   @keyframes upIn{to{opacity:1;transform:none}}
   /* Reduced motion: short plain fade, no scaling/sliding/stagger */
-  .anim.rm #splash .wm .cap,.anim.rm #splash .wm .rest,.anim.rm #splash .wm .w{transition:none}
   .anim.rm #splash .lg,.anim.rm #splash .wm .wi,.anim.rm #splash .tg{animation:fadeIn .3s ease forwards;transform:none}
   .anim.rm #splash .ln{animation:none;width:220px}
   .anim.rm .banner,.anim.rm .panel,.anim.rm .foot{transform:none}
@@ -252,12 +266,37 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   document.addEventListener('DOMContentLoaded',function(){
     var els=document.querySelectorAll('.banner,.panel,.foot');
     for (var i=0;i<els.length;i++) els[i].style.setProperty('--i',i);
-    var sp=document.getElementById('splash'), hold=rm?1300:1550, expandHold=rm?0:1600;
-    if (rm) sp.classList.add('expand');          /* reduced motion: full phrase shown at once, plain fade */
+    var sp=document.getElementById('splash'), hold=rm?1300:1550, expandHold=rm?0:1800;   /* 1s glide + ~0.8s hold */
+    if (rm) sp.classList.add('final');           /* reduced motion: full phrase shown at once, plain fade */
+    function expand(){                            /* FLIP: First (AMIT) -> Last (full phrase), all lengths eased together */
+      var wm=sp.querySelector('.wm'), wi=sp.querySelector('.wi'), ws=[].slice.call(wi.querySelectorAll('.w')), rs=[].slice.call(wi.querySelectorAll('.rest'));
+      function rel(el){var r=el.getBoundingClientRect(),o=wi.getBoundingClientRect();return {x:r.left-o.left,y:r.top-o.top};}
+      var w0=wi.offsetWidth,h0=wi.offsetHeight,first=ws.map(rel);
+      sp.classList.add('final');
+      var w1=wi.offsetWidth,h1=wi.offsetHeight,last=ws.map(rel),rw=rs.map(function(r){return r.getBoundingClientRect().width;});
+      sp.classList.remove('final');
+      sp.classList.add('flip');
+      wi.style.width=w0+'px';wi.style.height=h0+'px';
+      ws.forEach(function(w,i){w.style.left=first[i].x+'px';w.style.top=first[i].y+'px';});
+      /* words that wrap to a lower line (phones): drop down first (0.45s), then glide sideways, so they never cross line 1 */
+      var E='cubic-bezier(.65,0,.35,1)';
+      ws.forEach(function(w,i){ if (last[i].y-first[i].y>2){
+        var r=w.querySelector('.rest'), c=w.querySelector('.cap');
+        w.style.transition='left .8s '+E+' .2s, top .45s cubic-bezier(.3,0,.2,1)';
+        c.style.transition='letter-spacing .8s '+E+' .2s';
+        r.style.transition='width .8s '+E+' .2s, opacity .55s ease '+(.25+i*.08)+'s, filter .65s ease '+(.2+i*.08)+'s';
+      }});
+      if (h1-h0>2) wi.style.transition='width 1s '+E+', height .45s cubic-bezier(.3,0,.2,1)';   /* grow height with the drop so nothing is clipped */
+      void wi.offsetWidth;                         /* commit the start state */
+      sp.classList.add('tr','expand');
+      wi.style.width=w1+'px';wi.style.height=h1+'px';
+      ws.forEach(function(w,i){w.style.left=last[i].x+'px';w.style.top=last[i].y+'px';});
+      rs.forEach(function(r,i){r.style.width=rw[i]+'px';});
+    }
     function go(){ sp.classList.add('out'); h.classList.add('reveal');
       setTimeout(function(){ sp.parentNode&&sp.parentNode.removeChild(sp); h.classList.remove('anim','rm','reveal'); }, 450+els.length*55+600); }
     if (rm) setTimeout(go, hold);
-    else setTimeout(function(){ sp.classList.add('expand'); setTimeout(go, expandHold); }, hold);
+    else setTimeout(function(){ expand(); setTimeout(go, expandHold); }, hold);
     sp.addEventListener('click', go, {once:true});
   });
 })();
@@ -266,7 +305,7 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
 </head>
 <body>
 <!-- AMIT app nav (shared by every page; rendered by render_site.py).
-     Top bar: logo + AMIT, then a Menu button that opens a vertical list (Main Board first, then the 10 staff pages) on PC and phone.
+     Top bar: logo + AMIT on the left, Menu button top-right that opens a vertical list (Main Board first, then the 10 staff pages) on PC and phone.
      Hidden under webdriver so the PNG card stays clean. -->
 <style>
   .appnav{position:sticky;top:0;z-index:1000;background:rgba(8,16,31,.97);backdrop-filter:blur(8px);border-bottom:1px solid #1f2f4d;
@@ -276,7 +315,7 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   .appnav .nb{display:flex;align-items:center;gap:10px;color:#e8eef8;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:2px;flex:none}
   .appnav .nb img{height:28px;width:auto}
   .appnav .mb{display:flex;align-items:center;gap:12px;background:#101c33;border:1px solid #1f2f4d;border-radius:9px;height:42px;padding:0 14px 0 12px;
-    color:#e8eef8;cursor:pointer;font:inherit;font-size:15px;min-width:0}
+    color:#e8eef8;cursor:pointer;font:inherit;font-size:15px;min-width:0;margin-left:auto}
   .appnav .mb:hover,.appnav.open .mb{border-color:#4cc3ff}
   .appnav .bars{display:flex;flex-direction:column;gap:4px;flex:none}
   .appnav .bars span{display:block;width:18px;height:2px;background:#e8eef8;border-radius:1px;transition:transform .2s,opacity .2s}
@@ -285,7 +324,7 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   .appnav.open .bars span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
   .appnav .mb .ml{font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-size:13px;color:#8fa1bf}
   .appnav .mb .cur{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .appnav .menu{display:none;position:absolute;top:56px;left:20px;width:340px;max-width:calc(100vw - 24px);list-style:none;margin:0;padding:8px;
+  .appnav .menu{display:none;position:absolute;top:56px;right:20px;left:auto;width:340px;max-width:calc(100vw - 24px);list-style:none;margin:0;padding:8px;
     background:#0d182c;border:1px solid #1f2f4d;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.45);max-height:calc(100vh - 72px);overflow-y:auto}
   .appnav.open .menu{display:block}
   .appnav .menu li.sep{height:1px;background:#1f2f4d;margin:6px 6px}
@@ -303,7 +342,7 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
   @media (max-width:600px){
     .appnav .in{padding:0 12px;gap:10px}
     .appnav .nb{font-size:18px}
-    .appnav .mb{margin-left:auto;max-width:62vw}
+    .appnav .mb{max-width:62vw}
     .appnav .menu{left:12px;right:12px;width:auto;top:56px}
     .appnav .menu a{padding:13px 12px;font-size:16px}
   }
