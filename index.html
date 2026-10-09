@@ -136,6 +136,60 @@
   .a-oil .v{font-size:34px}
   .a-lvl td{letter-spacing:-.3px}
   .gauge svg{width:100%;height:auto;max-width:330px}
+
+  /* ===== v3 additions: headline, stats tiles, stacked column, callout, grouped timeline ===== */
+  .headline{font-size:27px;color:var(--text);margin-top:12px;max-width:1080px;line-height:1.35}
+  .a-ev{grid-column:span 6}
+  .a-stack{grid-column:span 6;display:flex;flex-direction:column;gap:18px}
+  .a-cx{grid-column:span 7} .a-cr{grid-column:span 5}
+  .a-inv,.a-bl{grid-column:span 6}
+  .a-lvl td{font-size:19px;padding:12px 3px;letter-spacing:-.6px}
+  .a-lvl th{padding:6px 3px 10px;font-size:14px;letter-spacing:.5px}
+  .a-lvl td.ins{font-size:18px;letter-spacing:0}
+  .a-lvl td.na2{font-family:"IBM Plex Sans",sans-serif;font-size:15px;line-height:1.1;color:var(--dim);letter-spacing:0;font-style:italic}
+  .a-lvl td.down{color:var(--bear)}
+  .stats{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:10px;margin:10px 0 6px}
+  .st{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .st .sl{font-size:17px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .st .sv{font-size:28px;font-weight:700;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .st .sc{font-size:20px;font-weight:600;font-family:"IBM Plex Mono",monospace}
+  .st .sn{font-size:18px;color:var(--muted)}
+  .sub{font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:14px 0 2px}
+  .sub:first-child{margin-top:0}
+  ul.b li b{color:var(--text);font-weight:700}
+  .grp{font-size:17px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);padding:14px 0 4px;border-bottom:1px solid var(--line)}
+  .grp:first-child{padding-top:0}
+  .ev{grid-template-columns:150px 170px 1fr}
+  .ev .t{font-size:27px;line-height:1.15}
+  .ev .t small{display:block;font-size:16px;color:var(--muted);font-family:"IBM Plex Sans",sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .callout{margin-top:16px;border-left:5px solid var(--hard);background:rgba(255,90,95,.08);padding:14px 16px;border-radius:6px;font-size:23px}
+  .callout .cl{font-size:17px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hard);margin-bottom:4px}
+
+  /* ===== Entry animation (splash + staggered panels). Only active when <html> has .anim,
+     which the head script adds for real visitors; never under navigator.webdriver (PNG render). ===== */
+  #splash{display:none}
+  .anim #splash{display:flex;position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at center,#12234a 0%,#0a1324 62%);
+    flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .45s ease}
+  .anim #splash.out{opacity:0;pointer-events:none}
+  #splash .lg{width:150px;height:150px;opacity:0;transform:scale(.72);filter:drop-shadow(0 0 0 rgba(76,195,255,0));
+    animation:lgIn .8s cubic-bezier(.2,.8,.2,1) .1s forwards, glow 1.4s ease-in-out .7s 1 both}
+  #splash .wm{overflow:hidden;font-family:"IBM Plex Sans",Arial,sans-serif;color:#e8eef8;font-weight:700;font-size:46px;letter-spacing:14px;padding-left:14px}
+  #splash .wm span{display:inline-block;transform:translateY(110%);animation:wmIn .6s cubic-bezier(.2,.8,.2,1) .65s forwards}
+  #splash .tg{font-family:"IBM Plex Sans",Arial,sans-serif;color:#8fa1bf;font-size:16px;letter-spacing:5px;text-transform:uppercase;opacity:0;animation:fadeIn .5s ease .95s forwards}
+  #splash .ln{width:0;height:2px;background:#4cc3ff;animation:lnIn .7s ease .85s forwards}
+  @keyframes lgIn{to{opacity:1;transform:scale(1)}}
+  @keyframes glow{0%{filter:drop-shadow(0 0 0 rgba(76,195,255,0))}50%{filter:drop-shadow(0 0 28px rgba(76,195,255,.55))}100%{filter:drop-shadow(0 0 10px rgba(76,195,255,.25))}}
+  @keyframes wmIn{to{transform:translateY(0)}}
+  @keyframes fadeIn{to{opacity:1}}
+  @keyframes lnIn{to{width:220px}}
+  .anim .banner,.anim .panel,.anim .foot{opacity:0;transform:translateY(18px)}
+  .anim.reveal .banner,.anim.reveal .panel,.anim.reveal .foot{animation:upIn .55s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i,0) * 55ms)}
+  @keyframes upIn{to{opacity:1;transform:none}}
+  /* Reduced motion: short plain fade, no scaling/sliding/stagger */
+  .anim.rm #splash .lg,.anim.rm #splash .wm span,.anim.rm #splash .tg{animation:fadeIn .3s ease forwards;transform:none}
+  .anim.rm #splash .ln{animation:none;width:220px}
+  .anim.rm .banner,.anim.rm .panel,.anim.rm .foot{transform:none}
+  .anim.rm.reveal .banner,.anim.rm.reveal .panel,.anim.rm.reveal .foot{animation:fadeIn .3s ease forwards;animation-delay:0s}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style id="fitcss">html,body{margin:0}</style>
@@ -145,17 +199,37 @@ if(w<1100){b.style.width='1440px';h.style.zoom=(w/1440);}else{h.style.zoom=0.85;
 window.addEventListener('resize',fit);document.addEventListener('DOMContentLoaded',fit);})();
 </script>
 
+<script>
+/* Entry animation controller: skipped entirely under automation (navigator.webdriver) so the PNG stays clean. */
+(function(){
+  if (navigator.webdriver) return;
+  var h=document.documentElement, rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  h.classList.add('anim'); if (rm) h.classList.add('rm');
+  document.addEventListener('DOMContentLoaded',function(){
+    var els=document.querySelectorAll('.banner,.panel,.foot');
+    for (var i=0;i<els.length;i++) els[i].style.setProperty('--i',i);
+    var sp=document.getElementById('splash'), hold=rm?700:1550;
+    function go(){ sp.classList.add('out'); h.classList.add('reveal');
+      setTimeout(function(){ sp.parentNode&&sp.parentNode.removeChild(sp); h.classList.remove('anim','rm','reveal'); }, 450+els.length*55+600); }
+    setTimeout(go, hold);
+    sp.addEventListener('click', go, {once:true});
+  });
+})();
+</script>
 <link rel="icon" type="image/png" href="favicon.png?v=2"><link rel="icon" type="image/png" href="apple-touch-icon.png?v=2"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<meta name="robots" content="noindex">
 </head>
 <body>
+<div id="splash" aria-hidden="true"><img class="lg" src="logo.png" alt=""><div class="wm"><span>AMIT</span></div><div class="ln"></div><div class="tg">NY Pre-Market Brief</div></div>
 <div class="wrap">
 
   <!-- ===== Banner ===== -->
   <header class="banner">
     <div>
       <div class="brand">AMIT<span class="bar">|</span><span class="sub">NY Pre-Market Brief</span></div>
-      <div class="meta"><b>Thu 8 Oct 2026</b> &nbsp;·&nbsp; 14:00 SAST</div>
-      <div class="meta" style="font-size:20px;color:var(--dim)">Last updated: Fri 09 Oct 2026, 11:46 SAST</div>
+      <div class="meta"><b>Thu 8 Oct 2026</b> &nbsp;·&nbsp; 14:15 SAST</div>
+      <div class="meta" style="font-size:20px;color:var(--dim)">Last updated: Thu 08 Oct 2026, 14:15 SAST</div>
+      <div class="headline">Today is Risk-Off. Index futures are down about 0.4% to 1%, oil is up about 4%, and long-dated yields are sitting near 24-year highs.</div>
     </div>
     <div class="banner-right">
       <div class="lbl">Overall tone</div>
@@ -189,79 +263,86 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
     </section>
     <section class="panel a-bias span4">
       <div class="ph">Index bias</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div class="bias"><div class="idx">Dow<span class="tick">US30</span></div><span class="pill bearish">Bearish</span><div class="why">Weakest index†</div></div><div class="bias"><div class="idx">Nasdaq<span class="tick">NAS100</span></div><span class="pill bearish">Bearish</span><div class="why">Soft on AI-funding jitters†</div></div><div class="bias"><div class="idx">S&amp;P<span class="tick">SPX</span></div><span class="pill bearish">Bearish</span></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div class="bias"><div class="idx">Dow<span class="tick">US30</span></div><span class="pill bearish">Bearish</span><div class="why">Weakest futures, most exposed to yields and oil.</div></div><div class="bias"><div class="idx">Nasdaq<span class="tick">NAS100</span></div><span class="pill bearish">Bearish</span><div class="why">AI-financing worries and soft chip names.</div></div><div class="bias"><div class="idx">S&amp;P<span class="tick">SPX</span></div><span class="pill bearish">Bearish</span><div class="why">Under yesterday&#x27;s close, VIX rising.</div></div></div>
     </section>
 
     <section class="panel a-oil span2 kpi">
       <div class="ph">Oil</div>
-      <div class="row"><span class="k">Brent <span class="chg up">+4%</span></span><span class="v mono">~$104.6</span></div>
+      <div class="row"><span class="k">Brent <span class="chg up">+4.4%</span></span><span class="v mono">~$104.6</span></div>
       <div class="row"><span class="k">WTI</span><span class="v mono">~$92.2</span></div>
-      <div class="note">Trump–Iran strike reports + Hurricane Isaias Gulf shut-ins.</div>
+      <div class="note">Iran-strike reports, new tanker attacks, and Hurricane Isaias shutting about a quarter of US Gulf oil output.</div>
     </section>
 
     <section class="panel a-ust span2 kpi">
       <div class="ph">Treasuries</div>
-      <div class="row"><span class="k">10Y</span><span class="v mono">5.32%</span></div>
-      <div class="row"><span class="k">30Y</span><span class="v mono">5.71%</span></div>
-      <div class="note">Long end near 24-year highs.† Fed hike risk stays live into the 30Y auction and Musalem.†</div>
+      <div class="row"><span class="k">10Y <span class="chg up">+~4bp</span></span><span class="v mono">~5.32%</span></div>
+      <div class="row"><span class="k">30Y <span class="chg up">+~4bp</span></span><span class="v mono">~5.71%</span></div>
+      <div class="note">Long-dated yields near 24-year highs.</div>
     </section>
     <section class="panel a-lvl span6">
       <div class="ph">Key levels <span class="src">TradingView T1 · Wed 7 Oct daily</span></div>
       <table class="mono">
-        <thead><tr><th>Instrument</th><th>Open</th><th>High<span class="s">PDH</span></th><th>Low<span class="s">PDL</span></th><th>Close<span class="s">PDC</span></th></tr></thead>
-        <tbody><tr><td class="ins">US30</td><td>51,521.82</td><td>51,534.57</td><td>50,868.42</td><td>51,106.32</td></tr><tr><td class="ins">NAS100</td><td>31,284.93</td><td>31,305.13</td><td>30,928.58</td><td>31,190.08</td></tr><tr><td class="ins">SPX</td><td>7,792.98</td><td>7,807.02</td><td>7,763.34</td><td>7,801.77</td></tr></tbody>
+        <thead><tr><th>Instrument</th><th>Open</th><th>High<span class="s">PDH</span></th><th>Low<span class="s">PDL</span></th><th>Close<span class="s">PDC</span></th><th>Now<span class="s">~14:08</span></th></tr></thead>
+        <tbody><tr><td class="ins">US30</td><td class="">51,521.82</td><td class="">51,534.57</td><td class="">50,868.42</td><td class="">51,106.32</td><td class="down">50,791</td></tr><tr><td class="ins">NAS100</td><td class="">31,284.93</td><td class="">31,305.13</td><td class="">30,928.58</td><td class="">31,190.08</td><td class="">30,995</td></tr><tr><td class="ins">SPX</td><td class="">7,792.98</td><td class="">7,807.02</td><td class="">7,763.34</td><td class="">7,801.77</td><td class="na2">cash closed</td></tr></tbody>
       </table>
+      <div class="note">US30 is already trading below its prior-day low, and NAS100 is just above its own.</div>
     </section>
     <section class="panel a-fut span2 kpi">
       <div class="ph">Index futures</div>
       <div class="big mono down">−0.4% to −1%</div>
-      <div class="note">US index futures lower pre-market; Dow the weakest.†</div>
+      <div class="note">Asia closed lower:</div>
+      <div class="stats" style="--n:2"><div class="st"><div class="sl">Nikkei</div><div class="sv">−1.4%</div></div><div class="st"><div class="sl">Hang Seng</div><div class="sv">−2.1%</div></div></div>
     </section>
 
-    <section class="panel a-ev span6">
-      <div class="ph">Event risk <span class="src">times SAST</span></div>
-      <div class="tl"><div class="ev"><div class="t mono">19:00</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>US 30Y Treasury auction</b><span>A strong auction pulling yields lower is part of the invalidation.</span></div></div><div class="ev"><div class="t mono">19:40</div><div><span class="tag hard">HARD</span></div><div class="d"><b>Fed&#x27;s Musalem speaks</b><span>Do not enter before 19:40 SAST.</span></div></div></div>
-      <div class="legend">HARD = do not enter before the event · WATCH = scheduled; no HARD/CONDITIONAL tag given in the brief</div>
+    <!-- ===== Row 3: Catalysts timeline (left) | Drivers, Yesterday, What's priced in (right stack) ===== -->
+    <section class="panel a-ev">
+      <div class="ph">Catalysts &amp; event risk <span class="src">times SAST</span></div>
+      <div class="tl"><div class="grp">Today · Thu 8 Oct</div><div class="ev"><div class="t mono">14:30</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Weekly jobless claims</b><span>Consensus 200K</span></div></div><div class="ev"><div class="t mono">15:00</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Houthi leader speech</b></div></div><div class="ev"><div class="t mono">15:00 / 16:00</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Wholesale inventories</b></div></div><div class="ev"><div class="t mono">15:30</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Cash open</b></div></div><div class="ev"><div class="t mono">16:40</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Kashkari panel</b></div></div><div class="ev"><div class="t mono">19:00</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>30Y bond auction ($22B)</b><span>Today&#x27;s big yield test. Can swing yields either way.</span></div></div><div class="ev"><div class="t mono">19:40</div><div><span class="tag hard">HARD</span></div><div class="d"><b>Musalem speaks</b><span>Policy Fed speech. Don&#x27;t enter right before it.</span></div></div><div class="grp">Later</div><div class="ev"><div class="t mono"><small>Fri 9 Oct</small>Pre-open</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>Delta earnings</b><span>Before the open</span></div></div><div class="ev"><div class="t mono"><small>Fri 9 Oct</small>16:00</div><div><span class="tag watch">WATCH</span></div><div class="d"><b>UMich sentiment</b></div></div><div class="ev"><div class="t mono"><small>Wed 14 Oct</small>14:30</div><div><span class="tag hard">HARD</span></div><div class="d"><b>CPI</b></div></div></div>
+      <div class="legend">HARD = do not enter right before the event · WATCH = scheduled / for information</div>
+      <div class="callout"><div class="cl">Key note</div>Musalem&#x27;s 19:40 speech is a HARD event (a policy Fed speech), so don&#x27;t enter right before it. The 30Y auction at 19:00 can swing yields either way.</div>
     </section>
+    <div class="stack a-stack">
+      <section class="panel a-drv">
+        <div class="ph">What's driving it</div>
+        <ul class="b"><li><b>Oil shock:</b> Brent is around $104.6 (+4.4%) and WTI around $92.2. Reports say Trump is weighing a strike on Iran before the midterms, and there have been new tanker attacks. Hurricane Isaias has shut about a quarter of US Gulf oil output. Higher oil means hotter inflation, which keeps Fed hikes on the table and hurts stocks.</li><li><b>Yields:</b> The 10Y is about 5.32% and the 30Y about 5.71%, both up around 4bp. Waller (a Fed voter) said this morning that more hikes are needed. High long yields hit the Dow, small caps and rate-sensitive sectors hardest.</li><li><b>Tech:</b> Nasdaq futures are soft on worries about how AI spending is being financed, such as Broadcom reportedly looking for $50B+ in funding. Asia closed lower, with the Nikkei -1.4% and Hang Seng -2.1%.</li></ul>
+      </section>
+      <section class="panel a-yday">
+        <div class="ph">Yesterday</div>
+        <div class="stats" style="--n:3"><div class="st"><div class="sl">S&amp;P</div><div class="sv">−0.22%</div></div><div class="st"><div class="sl">Nasdaq</div><div class="sv">−0.22%</div></div><div class="st"><div class="sl">Dow</div><div class="sv">−0.66%</div></div></div><ul class="b"><li>The Sept FOMC minutes barely moved markets.</li><li>A strong 10Y auction helped stocks pare losses.</li></ul>
+      </section>
+      <section class="panel a-fed">
+        <div class="ph">What's priced in <span class="src">Fed</span></div>
+        <div class="stats" style="--n:2"><div class="st"><div class="sl">Oct (28 Oct) · Hold</div><div class="sv">~82%</div></div><div class="st"><div class="sl">Dec · +25bp hike</div><div class="sv">~66%</div><div class="sn">~80% counting any hike</div></div></div><ul class="b"><li>The minutes didn&#x27;t change those odds. The new Iran risk premium in oil is the part that&#x27;s still moving.</li></ul>
+      </section>
+    </div>
 
-    <!-- ===== Row 4: Drivers + Fed/Rates ===== -->
-    <section class="panel a-drv span4">
-      <div class="ph">Drivers &amp; macro</div>
-      <ul class="b"><li>Oil +4%: reports Trump is weighing an Iran strike before the midterms.</li><li>Fresh tanker attacks around Hormuz; Iran threatening to shut a bypass route.†</li><li>Hurricane Isaias: ~25% of US Gulf oil and ~16% of gas output shut in; Shell and Chevron curtailing.†</li><li>Oil spike feeding a global bond and stock sell-off; Nasdaq also soft on AI-funding jitters.†</li></ul>
+    <!-- ===== Row 4: Crypto | Credit & positioning ===== -->
+    <section class="panel a-cx">
+      <div class="ph">Crypto <span class="src">24h</span></div>
+      <div class="stats" style="--n:4"><div class="st"><div class="sl">BTC</div><div class="sv">$82,325</div><div class="sc down">−1.6%</div></div><div class="st"><div class="sl">ETH</div><div class="sv">$2,530</div><div class="sc down">−1.8%</div></div><div class="st"><div class="sl">XRP</div><div class="sv">$1.39</div><div class="sc down">−3.6%</div></div><div class="st"><div class="sl">XLM</div><div class="sv">$0.198</div><div class="sc down">−2.7%</div></div></div><ul class="b"><li><b>What&#x27;s moving it:</b> High yields plus heavy ETF selling. US spot BTC ETFs lost $487M on Wednesday, the most since late June. ETH ETFs have had 7 straight days of outflows.</li><li><b>What to watch:</b> BTC support at $80.5-81.5k, where the 50-day average sits near $80.55k. If that breaks, $76k is next.</li><li><b>Regulation:</b> The CFTC published an early-stage, non-binding rulemaking notice on crypto trading that names XRP and XLM as examples of digital commodities. That&#x27;s a positive sign, but it isn&#x27;t a final ruling. The CLARITY Act (crypto market-structure bill) is still stuck in the Senate.</li><li><b>Positioning:</b> About $550-600M was liquidated, mostly longs. Funding is near flat and open interest is lower, so leverage has been cleared out rather than rebuilt.</li></ul>
     </section>
-    <section class="panel a-fed span2">
-      <div class="ph">Fed pricing</div>
-      <ul class="b"><li>ROXY: October hold ~82%.</li><li>December +25bp ~66%.</li><li>Waller hawkish.</li></ul>
-    </section>
-
-    <!-- ===== Row 5: Credit/positioning + Crypto ===== -->
-    <section class="panel a-cr span3">
+    <section class="panel a-cr">
       <div class="ph">Credit &amp; positioning</div>
-      <p class="na">Not in the recovered brief text.</p>
-    </section>
-    <section class="panel a-cx span3">
-      <div class="ph">Crypto</div>
-      <p class="na">Not in the recovered brief text.</p>
+      <div class="sub">Credit</div><div class="stats" style="--n:2"><div class="st"><div class="sl">HY spreads</div><div class="sv">312bp</div><div class="sc down">+10bp</div><div class="sn">this week</div></div><div class="st"><div class="sl">IG</div><div class="sv">84bp</div></div></div><ul class="b"><li>Spreads are drifting wider but there&#x27;s no funding stress.</li></ul><div class="sub">Positioning</div><ul class="b"><li>VIX is around 16 and rising.</li><li>Retail is very bullish on stocks even though the latest AAII survey leaned bearish.</li><li>Mega-cap AI has been the place investors hide, which makes it crowded.</li><li>Long oil is the trade with real support behind it.</li></ul>
     </section>
 
-    <!-- ===== Row 6: Desk notes (rows from JSON desk_notes[]; tiles with long content go full width) ===== -->
-    <section class="panel a-desk span6">
-      <div class="ph">Desk notes</div>
-      <div class="desk"><div class="dn"><div class="dh"><span class="dt">FX / USD</span><span class="ag">DINERO</span></div><p class="na">Not in the recovered brief text.</p></div><div class="dn"><div class="dh"><span class="dt">Liquidity</span><span class="ag">LISA</span></div><p class="na">Not in the recovered brief text.</p></div><div class="dn"><div class="dh"><span class="dt">Cross-asset</span><span class="ag">NEXUS</span></div><p class="na">Not in the recovered brief text.</p></div><div class="dn"><div class="dh"><span class="dt">News / Catalysts</span><span class="ag">MIKE</span></div><p class="na">Not in the recovered brief text.</p></div></div>
-    </section>
+    
 
-    <!-- ===== Row 7: Invalidation ===== -->
-    <section class="panel a-inv span6 inval">
-      <div class="ph">Invalidation &mdash; what flips the bearish call</div>
-      <p>Oil fades and a strong 30Y auction pulls yields lower, and indices reclaim PDC (US30 51,106.32 · NAS100 31,190.08 · SPX 7,801.77).</p>
+    <!-- ===== Row 5: Invalidation | Bottom line ===== -->
+    <section class="panel a-inv inval">
+      <div class="ph">Invalidation &mdash; what flips the call</div>
+      <p>The bearish call is wrong if the Iran-strike talk cools, oil fades, and a strong 30Y auction (like yesterday&#x27;s 10Y) pulls yields lower. If that happens, watch for indices to reclaim PDC (US30 51,106, NAS100 31,190, SPX 7,801), which would move the bias to Neutral.</p>
+    </section>
+    <section class="panel a-bl inval">
+      <div class="ph">Bottom line</div>
+      <p>Oil and yields set the tone today, so lean bearish. Thursday is a focus day: wait for a 1H swing-failure setup at a level, stay out right before Musalem, and be flat by session end.</p>
     </section>
   </div>
 
   <footer class="foot">
-    <p>† Detail from AMIT&#x27;s same-day voice follow-up (~14:24 SAST). Levels: TradingView T1, Wed 7 Oct daily candle (PDH/PDL/PDC = Wed H/L/C). Market intelligence, not investment advice.</p>
+    <p>Levels: TradingView T1, Wed 7 Oct daily candle (PDH/PDL/PDC = Wed High/Low/Close). Now = ~14:08 SAST. All times SAST.</p>
     <span>AMIT · Chief of Market Intelligence</span>
   </footer>
 </div>
 </body>
 </html>
-<meta name="robots" content="noindex">
