@@ -104,6 +104,10 @@
   .appnav{position:sticky;top:0;z-index:1000;background:rgba(8,16,31,.97);backdrop-filter:blur(8px);border-bottom:1px solid #1f2f4d;
     font-family:"IBM Plex Sans","Inter","Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#e8eef8}
   html.wd .appnav{display:none}
+  html{scrollbar-gutter:stable;overflow-y:scroll}
+  .appnav{width:100%;box-sizing:border-box}
+  .appnav .mb{width:250px;flex:none;justify-content:flex-start}
+  @media (max-width:600px){.appnav .mb{width:220px}}
   .appnav .in{position:relative;display:flex;align-items:center;gap:16px;padding:0 20px;height:60px}
   .appnav .nb{display:flex;align-items:center;gap:10px;color:#e8eef8;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:2px;flex:none}
   .appnav .nb img{height:28px;width:auto}
