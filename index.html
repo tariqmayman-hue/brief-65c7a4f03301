@@ -174,7 +174,17 @@
   #splash .lg{width:150px;height:150px;opacity:0;transform:scale(.72);filter:drop-shadow(0 0 0 rgba(76,195,255,0));
     animation:lgIn .8s cubic-bezier(.2,.8,.2,1) .1s forwards, glow 1.4s ease-in-out .7s 1 both}
   #splash .wm{overflow:hidden;font-family:"IBM Plex Sans",Arial,sans-serif;color:#e8eef8;font-weight:700;font-size:46px;letter-spacing:14px;padding-left:14px}
-  #splash .wm span{display:inline-block;transform:translateY(110%);animation:wmIn .6s cubic-bezier(.2,.8,.2,1) .65s forwards}
+  #splash .wm .wi{display:inline-flex;flex-wrap:wrap;justify-content:center;transform:translateY(110%);animation:wmIn .6s cubic-bezier(.2,.8,.2,1) .65s forwards}
+  /* Phase 2 (after the logo sequence): letters spread and expand into "Ai Market Intelligence Terminal" */
+  #splash .wm .w{display:inline-flex;white-space:nowrap;margin-right:0;transition:margin .4s cubic-bezier(.2,.8,.2,1)}
+  #splash .wm .cap{letter-spacing:14px;transition:letter-spacing .4s cubic-bezier(.2,.8,.2,1)}
+  #splash .wm .rest{display:inline-block;max-width:0;opacity:0;overflow:hidden;font-weight:500;letter-spacing:1px;vertical-align:bottom;
+    transition:max-width .55s cubic-bezier(.3,.7,.2,1),opacity .4s ease;transition-delay:calc(.08s + var(--d,0) * .08s)}
+  #splash.expand .wm{padding-left:0;max-width:94vw}
+  #splash.expand .wm .w{margin:0 .14em}
+  #splash.expand .wm .cap{letter-spacing:1px}
+  #splash.expand .wm .rest{max-width:8em;opacity:1}
+  @media (max-width:700px){ #splash.expand .wm{font-size:34px;line-height:1.2;transition:font-size .5s ease} }
   #splash .tg{font-family:"IBM Plex Sans",Arial,sans-serif;color:#8fa1bf;font-size:16px;letter-spacing:5px;text-transform:uppercase;opacity:0;animation:fadeIn .5s ease .95s forwards}
   #splash .ln{width:0;height:2px;background:#4cc3ff;animation:lnIn .7s ease .85s forwards}
   @keyframes lgIn{to{opacity:1;transform:scale(1)}}
@@ -186,7 +196,8 @@
   .anim.reveal .banner,.anim.reveal .panel,.anim.reveal .foot{animation:upIn .55s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i,0) * 55ms)}
   @keyframes upIn{to{opacity:1;transform:none}}
   /* Reduced motion: short plain fade, no scaling/sliding/stagger */
-  .anim.rm #splash .lg,.anim.rm #splash .wm span,.anim.rm #splash .tg{animation:fadeIn .3s ease forwards;transform:none}
+  .anim.rm #splash .wm .cap,.anim.rm #splash .wm .rest,.anim.rm #splash .wm .w{transition:none}
+  .anim.rm #splash .lg,.anim.rm #splash .wm .wi,.anim.rm #splash .tg{animation:fadeIn .3s ease forwards;transform:none}
   .anim.rm #splash .ln{animation:none;width:220px}
   .anim.rm .banner,.anim.rm .panel,.anim.rm .foot{transform:none}
   .anim.rm.reveal .banner,.anim.rm.reveal .panel,.anim.rm.reveal .foot{animation:fadeIn .3s ease forwards;animation-delay:0s}
@@ -221,10 +232,13 @@
   .a-cmd .csrc{color:var(--dim);font-size:15px;margin-top:6px;line-height:1.3}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <style id="fitcss">html,body{margin:0}</style>
 <script>
-(function(){function fit(){if(navigator.webdriver)return;var w=window.innerWidth,b=document.body,h=document.documentElement;if(!b)return;
-if(w<1100){b.style.width='1440px';h.style.zoom=(w/1440);}else{h.style.zoom=0.85;b.style.width=(w/0.85)+'px';}}
+/* Fit-to-width: scales the dashboard (.wrap) only, so the app nav above it stays at native size. Off under webdriver (PNG render). */
+if(navigator.webdriver)document.documentElement.classList.add('wd');
+(function(){function fit(){if(navigator.webdriver)return;var w=document.documentElement.clientWidth,b=document.body,d=document.querySelector('.wrap');if(!b||!d)return;
+b.style.width='auto';if(w<1100){d.style.width='1440px';d.style.zoom=(w/1440);}else{d.style.zoom=0.85;d.style.width=(w/0.85)+'px';}}
 window.addEventListener('resize',fit);document.addEventListener('DOMContentLoaded',fit);})();
 </script>
 
@@ -232,24 +246,84 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
 /* Entry animation controller: skipped entirely under automation (navigator.webdriver) so the PNG stays clean. */
 (function(){
   if (navigator.webdriver) return;
+  try { if (sessionStorage.getItem('amitSplashSeen')) return; sessionStorage.setItem('amitSplashSeen','1'); } catch(_) {}  /* once per session */
   var h=document.documentElement, rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   h.classList.add('anim'); if (rm) h.classList.add('rm');
   document.addEventListener('DOMContentLoaded',function(){
     var els=document.querySelectorAll('.banner,.panel,.foot');
     for (var i=0;i<els.length;i++) els[i].style.setProperty('--i',i);
-    var sp=document.getElementById('splash'), hold=rm?700:1550;
+    var sp=document.getElementById('splash'), hold=rm?1300:1550, expandHold=rm?0:1600;
+    if (rm) sp.classList.add('expand');          /* reduced motion: full phrase shown at once, plain fade */
     function go(){ sp.classList.add('out'); h.classList.add('reveal');
       setTimeout(function(){ sp.parentNode&&sp.parentNode.removeChild(sp); h.classList.remove('anim','rm','reveal'); }, 450+els.length*55+600); }
-    setTimeout(go, hold);
+    if (rm) setTimeout(go, hold);
+    else setTimeout(function(){ sp.classList.add('expand'); setTimeout(go, expandHold); }, hold);
     sp.addEventListener('click', go, {once:true});
   });
 })();
 </script>
 <link rel="icon" type="image/png" href="favicon.png?v=2"><link rel="icon" type="image/png" href="apple-touch-icon.png?v=2"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
-<meta name="robots" content="noindex">
 </head>
 <body>
-<div id="splash" aria-hidden="true"><img class="lg" src="logo.png" alt=""><div class="wm"><span>AMIT</span></div><div class="ln"></div><div class="tg">NY Pre-Market Brief</div></div>
+<!-- AMIT app nav (shared by every page; rendered by render_site.py).
+     Top bar: logo + AMIT, then a Menu button that opens a vertical list (Main Board first, then the 10 staff pages) on PC and phone.
+     Hidden under webdriver so the PNG card stays clean. -->
+<style>
+  .appnav{position:sticky;top:0;z-index:1000;background:rgba(8,16,31,.97);backdrop-filter:blur(8px);border-bottom:1px solid #1f2f4d;
+    font-family:"IBM Plex Sans","Inter","Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#e8eef8}
+  html.wd .appnav{display:none}
+  .appnav .in{position:relative;display:flex;align-items:center;gap:16px;padding:0 20px;height:60px}
+  .appnav .nb{display:flex;align-items:center;gap:10px;color:#e8eef8;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:2px;flex:none}
+  .appnav .nb img{height:28px;width:auto}
+  .appnav .mb{display:flex;align-items:center;gap:12px;background:#101c33;border:1px solid #1f2f4d;border-radius:9px;height:42px;padding:0 14px 0 12px;
+    color:#e8eef8;cursor:pointer;font:inherit;font-size:15px;min-width:0}
+  .appnav .mb:hover,.appnav.open .mb{border-color:#4cc3ff}
+  .appnav .bars{display:flex;flex-direction:column;gap:4px;flex:none}
+  .appnav .bars span{display:block;width:18px;height:2px;background:#e8eef8;border-radius:1px;transition:transform .2s,opacity .2s}
+  .appnav.open .bars span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+  .appnav.open .bars span:nth-child(2){opacity:0}
+  .appnav.open .bars span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+  .appnav .mb .ml{font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-size:13px;color:#8fa1bf}
+  .appnav .mb .cur{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .appnav .menu{display:none;position:absolute;top:56px;left:20px;width:340px;max-width:calc(100vw - 24px);list-style:none;margin:0;padding:8px;
+    background:#0d182c;border:1px solid #1f2f4d;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.45);max-height:calc(100vh - 72px);overflow-y:auto}
+  .appnav.open .menu{display:block}
+  .appnav .menu li.sep{height:1px;background:#1f2f4d;margin:6px 6px}
+  .appnav .menu li.hd{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5f7193;padding:6px 12px 4px}
+  .appnav .menu a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#c9d2e3;text-decoration:none;font-size:15px}
+  .appnav .menu a:hover{background:#13213b;color:#fff}
+  .appnav .menu a.on{background:#13284a;color:#fff;box-shadow:inset 3px 0 0 #4cc3ff}
+  .appnav .menu a .sec{flex:1}
+  .appnav .menu a b{font-size:12.5px;letter-spacing:1px;color:#8fa1bf;font-weight:600}
+  .appnav .menu a.on b{color:#4cc3ff}
+  .appnav .menu a .dot{width:7px;height:7px;border-radius:50%;background:#2fd08a;flex:none}
+  .appnav .menu a.nr{color:#7d8ba6}
+  .appnav .menu a.nr .dot{background:#3a4866}
+  .appnav .menu a.home{font-weight:700;color:#e8eef8}
+  @media (max-width:600px){
+    .appnav .in{padding:0 12px;gap:10px}
+    .appnav .nb{font-size:18px}
+    .appnav .mb{margin-left:auto;max-width:62vw}
+    .appnav .menu{left:12px;right:12px;width:auto;top:56px}
+    .appnav .menu a{padding:13px 12px;font-size:16px}
+  }
+</style>
+<nav class="appnav" aria-label="AMIT">
+  <div class="in">
+    <a class="nb" href="index.html"><img src="logo.png" alt="">AMIT</a>
+    <button class="mb" type="button" aria-haspopup="true" aria-expanded="false"><span class="bars"><span></span><span></span><span></span></span><span class="ml">Menu</span><span class="cur">Main Board</span></button>
+    <ul class="menu" role="menu"><li><a class="home on" href="index.html" role="menuitem"><span class="sec">Main Board</span></a></li><li class="sep"></li><li class="hd">Staff</li><li><a class="" href="macro.html" role="menuitem"><span class="dot"></span><span class="sec">Macro</span><b>ATLAS</b></a></li><li><a class="" href="rates.html" role="menuitem"><span class="dot"></span><span class="sec">Rates</span><b>ROXY</b></a></li><li><a class="nr" href="fx.html" role="menuitem" title="No report for this brief"><span class="dot"></span><span class="sec">FX</span><b>DINERO</b></a></li><li><a class="" href="equities.html" role="menuitem"><span class="dot"></span><span class="sec">Equities</span><b>EMILY</b></a></li><li><a class="" href="liquidity.html" role="menuitem"><span class="dot"></span><span class="sec">Liquidity</span><b>LISA</b></a></li><li><a class="" href="crypto.html" role="menuitem"><span class="dot"></span><span class="sec">Crypto</span><b>CRYPTIC</b></a></li><li><a class="" href="commodities.html" role="menuitem"><span class="dot"></span><span class="sec">Commodities</span><b>CRUDE</b></a></li><li><a class="" href="news.html" role="menuitem"><span class="dot"></span><span class="sec">News</span><b>MIKE</b></a></li><li><a class="" href="cross-asset.html" role="menuitem"><span class="dot"></span><span class="sec">Cross-Asset</span><b>NEXUS</b></a></li><li><a class="nr" href="quant.html" role="menuitem" title="No report for this brief"><span class="dot"></span><span class="sec">Quant</span><b>MAT</b></a></li></ul>
+  </div>
+</nav>
+<script>
+(function(){var n=document.currentScript.previousElementSibling,b=n.querySelector('.mb');
+function set(o){n.classList.toggle('open',o);b.setAttribute('aria-expanded',o);}
+b.addEventListener('click',function(e){e.stopPropagation();set(!n.classList.contains('open'));});
+document.addEventListener('click',function(e){if(!n.contains(e.target))set(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
+</script>
+
+<div id="splash" aria-hidden="true"><img class="lg" src="logo.png" alt=""><div class="wm"><span class="wi"><span class="w"><span class="cap">A</span><span class="rest" style="--d:0">i</span></span><span class="w"><span class="cap">M</span><span class="rest" style="--d:1">arket</span></span><span class="w"><span class="cap">I</span><span class="rest" style="--d:2">ntelligence</span></span><span class="w"><span class="cap">T</span><span class="rest" style="--d:3">erminal</span></span></span></div><div class="ln"></div><div class="tg">NY Pre-Market Brief</div></div>
 <div class="wrap">
 
   <!-- ===== Banner ===== -->
