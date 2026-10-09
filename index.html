@@ -693,7 +693,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
         if(a.left<b.right+6&&a.right>b.left-6)m.classList.add('bot');});
     }
     var mm=bst!==edt, dst=q('.ndst.pc'), dph=q('.ndst.ph');
-    dst.textContent=mm?'DST: MISMATCH':(bst?'DST: ON':'DST: OFF'); dph.textContent=mm?'DST MISMATCH':(bst?'DST ON':'DST OFF');
+    dst.textContent=mm?'DST Mismatch':(bst?'DST Active':'DST Inactive'); dph.textContent=mm?'DST MISMATCH':(bst?'DST ON':'DST OFF');
     [dst,dph].forEach(function(x){x.classList.toggle('mm',mm);x.classList.toggle('off',!mm&&!bst);});
     dph.title=dst.title='UK: '+(bst?'BST (summer)':'GMT (winter)')+' · US: '+(edt?'EDT (summer)':'EST (winter)')+(mm?' · DST mismatch: London–NY open gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(ses.n[0]-ses.l[0])+' (normally 6h30)':'');
     var live=null,nx=null; HARD.forEach(function(x){if(now>=x.t-2*M&&now<x.t+30*M)live=x;else if(x.t>now&&(!nx||x.t<nx.t))nx=x;});
