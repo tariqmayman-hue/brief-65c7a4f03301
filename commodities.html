@@ -81,6 +81,28 @@
   .empty{background:var(--panel);border:1px dashed var(--line);border-radius:14px;padding:46px 24px;text-align:center;color:var(--muted)}
   .empty b{display:block;color:var(--text);font-size:22px;margin-bottom:6px}
 
+
+  /* Desk report from desk-inbox markdown (publish_desk.sh): one readable column of panels */
+  .mdr{display:flex;flex-direction:column;gap:16px;margin-top:4px}
+  .panel.md{font-size:17.5px;line-height:1.6}
+  .panel.md p{margin:6px 0 10px;max-width:96ch}
+  .panel.md h3{font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+  .panel.md ul.b,.panel.md ol.mdol{max-width:96ch;margin:4px 0 10px}
+  .panel.md ul.b.sub{margin:2px 0 4px}
+  .panel.md ul.b.sub li:before{background:var(--dim);width:6px;height:6px}
+  .panel.md ol.mdol{padding-left:26px}.panel.md ol.mdol li{margin:5px 0;padding-left:4px}
+  .panel.md ol.mdol li::marker{color:var(--accent);font-weight:700}
+  .panel.md a{color:var(--accent);text-decoration:none;word-break:break-word}
+  .panel.md code{font-family:"IBM Plex Mono",monospace;font-size:.9em;background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+  .panel.md .mdpre{font-family:"IBM Plex Mono",monospace;font-size:14px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;white-space:pre}
+  .panel.md .mdq{border-left:3px solid var(--accent);padding:4px 0 4px 14px;color:var(--muted);margin:8px 0}
+  .panel.md .mdtbl{overflow-x:auto;margin:8px 0 12px}
+  .panel.md table{border-collapse:collapse;font-size:15.5px;min-width:60%}
+  .panel.md th,.panel.md td{border-bottom:1px solid var(--line);padding:7px 12px;text-align:left;vertical-align:top}
+  .panel.md th{font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+  .panel.md td{font-variant-numeric:tabular-nums}
+  @media (max-width:700px){.panel.md{font-size:16px}.panel.md table{font-size:14px}}
+
   .foot{margin-top:28px;display:flex;justify-content:space-between;gap:16px;color:var(--dim);font-size:14px;flex-wrap:wrap}
   .foot a{color:var(--muted)}
 
@@ -109,7 +131,7 @@
   .appnav{width:100%;box-sizing:border-box}
   .appnav .mb{width:250px;flex:none;justify-content:flex-start}
   @media (max-width:600px){.appnav .mb{width:220px}}
-  .appnav .in{position:relative;display:flex;align-items:center;gap:16px;padding:0 20px;height:60px}
+  .appnav .in{position:relative;z-index:2;display:flex;align-items:center;gap:16px;padding:0 20px;height:60px}
   .appnav .nb{display:flex;align-items:center;gap:10px;color:#e8eef8;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:2px;flex:none}
   .appnav .nb img{height:28px;width:auto}
   .appnav .mb{display:flex;align-items:center;gap:12px;background:#101c33;border:1px solid #1f2f4d;border-radius:9px;height:42px;padding:0 14px 0 12px;
@@ -124,6 +146,8 @@
   .appnav .mb .cur{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .appnav .menu{display:none;position:absolute;top:56px;right:20px;left:auto;width:340px;max-width:calc(100vw - 24px);list-style:none;margin:0;padding:8px;
     background:#0d182c;border:1px solid #1f2f4d;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.45);max-height:calc(100vh - 72px);overflow-y:auto}
+  /* Stacking: .in (z 2, holds the Menu) sits above .ntlrow (z 1, contains the NOW/HARD markers' z 2-3), so the open dropdown covers the whole timeline row. */
+  .appnav .menu{z-index:1000}
   .appnav.open .menu{display:block}
   .appnav .menu li.sep{height:1px;background:#1f2f4d;margin:6px 6px}
   .appnav .menu li.hd{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5f7193;padding:6px 12px 4px}
@@ -172,7 +196,7 @@
   .appnav .ncd.live b,.appnav .ncd.live .t{color:#ff5a5f}
 
   /* ===== Labelled session timeline: slim second nav row (SAST). Lane 1 = Asia, London; lane 2 = NY Pre, NY (no overlap inside a lane). ===== */
-  .appnav .ntlrow{border-top:1px solid #1f2f4d;background:#0b1528;padding:3px 20px 4px}
+  .appnav .ntlrow{position:relative;z-index:1;border-top:1px solid #1f2f4d;background:#0b1528;padding:3px 20px 4px}
   .appnav .ntl{position:relative;width:68%;max-width:1240px;margin:0 auto}
   .appnav .ntl-cap{position:absolute;right:calc(100% + 14px);top:15px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#5f7193;white-space:nowrap;line-height:1.25;text-align:right}
   .appnav .ntl-tr{position:relative;height:52px}
