@@ -140,71 +140,99 @@
 
   /* ===== Compact session clock in the nav (between brand and Menu). The Menu button keeps its fixed width/position. ===== */
   html:not(.wd) .a-clock{display:none}            /* the board's big clock strip is only for the PNG / nav-less card */
-  .appnav .nclk{flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:12px;overflow:hidden;white-space:nowrap;font-size:13px;color:#8fa1bf}
+  .appnav .nclk{flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:12px;overflow:hidden;white-space:nowrap;font-size:13px;color:#8fa1bf}
   .appnav .mb{margin-left:0}
   .appnav .nclk .nt{font-family:"IBM Plex Mono",ui-monospace,monospace;color:#e8eef8;font-size:17px;font-weight:700;letter-spacing:-.3px;flex:none}
   .appnav .nclk .nt .s{color:#8fa1bf;font-size:13px;font-weight:600}
   .appnav .nclk .nt .z{color:#5f7193;font-size:11px;font-weight:600;letter-spacing:1px;margin-left:4px}
   .appnav .nclk .nl1,.appnav .nclk .nl2{display:contents}
-  .appnav .nchips{display:flex;gap:4px;flex:none}
+  .appnav .nchips{display:flex;gap:4px;flex:none;order:9}        /* session chips sit on the right, next to the Menu button */
   .appnav .nchips i{font-style:normal;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #1f2f4d;color:#5f7193;background:#0d182c}
   .appnav .nchips i.on{color:#06202e;background:#4cc3ff;border-color:#4cc3ff;box-shadow:0 0 8px rgba(76,195,255,.45)}
-  .appnav .nbar{position:relative;width:132px;height:20px;flex:none;border-radius:4px;background:#0d182c;border:1px solid #1f2f4d}
-  .appnav .nbar .sg{position:absolute;height:4px;border-radius:2px;background:rgba(76,195,255,.35)}
-  .appnav .nbar .sg.on{background:#4cc3ff}
-  .appnav .nbar .sg.a{top:3px} .appnav .nbar .sg.l{top:8px} .appnav .nbar .sg.n{top:13px}
-  .appnav .nbar .hd{position:absolute;top:1px;bottom:1px;border-left:1px dashed #ff5a5f}
-  .appnav .nbar .nw{position:absolute;top:-2px;bottom:-2px;width:2px;margin-left:-1px;background:#fff;border-radius:1px;box-shadow:0 0 4px rgba(255,255,255,.7)}
+  .appnav .nchips i.pre{color:#1b1300;background:#f5b942;border-color:#f5b942;box-shadow:0 0 8px rgba(245,185,66,.45)}   /* NY pre-market */
   .appnav .ndst{font-size:11px;font-weight:700;letter-spacing:.8px;color:#c9d2e3;border:1px solid #1f2f4d;border-radius:5px;padding:2px 7px;background:#0d182c;flex:none}
   .appnav .ndst.ph{display:none}
-  .appnav .ndst .dd{display:none;width:7px;height:7px;border-radius:50%;background:#5f7193}
-  .appnav .nmm{font-size:11px;font-weight:700;color:#1b1300;background:#f5b942;border-radius:5px;padding:2px 7px;flex:none}
-  .appnav .nmm[hidden]{display:none}
+  .appnav .ndst.mm{color:#1b1300;background:#f5b942;border-color:#f5b942}
+  .appnav .ndst.off{color:#8fa1bf}
   .appnav .ncd{font-size:13px;color:#8fa1bf;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
-  .appnav .ncd em{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:1px;color:#ff5a5f;border:1px solid rgba(255,90,95,.6);border-radius:4px;padding:1px 5px;margin-right:6px}
+  .appnav .ncd .lb{color:#8fa1bf}
   .appnav .ncd b{color:#e8eef8;font-weight:700}
   .appnav .ncd .t{color:#e8eef8;font-weight:600;font-variant-numeric:tabular-nums}
   .appnav .ncd.live b,.appnav .ncd.live .t{color:#ff5a5f}
-  @media (max-width:1240px){.appnav .nbar{display:none}}
-  @media (max-width:1000px){.appnav .nclk .nt .s,.appnav .nclk .nt .z{display:none}.appnav .nmm{font-size:0;padding:0;width:8px;height:8px;border-radius:50%}}
-  @media (max-width:760px){.appnav .nchips i:not(.on){display:none}.appnav .ncd em{display:none}}
+
+  /* ===== Labelled session timeline: slim second nav row (SAST). Lane 1 = Asia, London; lane 2 = NY Pre, NY (no overlap inside a lane). ===== */
+  .appnav .ntlrow{border-top:1px solid #1f2f4d;background:#0b1528;padding:3px 20px 4px}
+  .appnav .ntl{position:relative;width:68%;max-width:1240px;margin:0 auto}
+  .appnav .ntl-cap{position:absolute;right:calc(100% + 14px);top:15px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#5f7193;white-space:nowrap;line-height:1.25;text-align:right}
+  .appnav .ntl-tr{position:relative;height:52px}
+  .appnav .ntl .ln{position:absolute;left:0;right:0;height:13px;border-radius:4px;background:#0d182c;box-shadow:inset 0 0 0 1px #1a2846}
+  .appnav .ntl .ln.l1{top:15px} .appnav .ntl .ln.l2{top:31px}
+  .appnav .ntl .gl{position:absolute;top:15px;height:29px;border-left:1px solid rgba(143,161,191,.10)}
+  .appnav .ntl .sg{position:absolute;top:0;bottom:0;border-radius:4px;background:rgba(76,195,255,.16);box-shadow:inset 0 0 0 1px rgba(76,195,255,.30);overflow:hidden;
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.6px;color:#8fa1bf;white-space:nowrap}
+  .appnav .ntl .sg.on{background:#4cc3ff;box-shadow:0 0 8px rgba(76,195,255,.5);color:#06202e}
+  .appnav .ntl .sg.pre{background:#f5b942;box-shadow:0 0 8px rgba(245,185,66,.5);color:#1b1300}
+  .appnav .ntl .sg .tm{font-weight:500;margin-left:5px;opacity:.85}
+  .appnav .ntl .sg.nar .tm{display:none}
+  .appnav .ntl .sg .sh{display:none}
+  .appnav .ntl .tk{position:absolute;bottom:0;transform:translateX(-50%);font-size:9.5px;color:#5f7193;font-family:"IBM Plex Mono",ui-monospace,monospace;line-height:1}
+  .appnav .ntl .tk.s{transform:none} .appnav .ntl .tk.e{transform:translateX(-100%)}
+  .appnav .ntl .mk{position:absolute;width:0}
+  .appnav .ntl .mk b{position:absolute;left:0;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:.5px;white-space:nowrap;padding:0 5px;border-radius:3px;line-height:13px}
+  .appnav .ntl .mk.r b{transform:translateX(calc(-100% + 1px))} .appnav .ntl .mk.l b{transform:translateX(-1px)}
+  .appnav .ntl .now{top:0;height:46px;border-left:2px solid #fff;margin-left:-1px;z-index:3;box-shadow:0 0 6px rgba(255,255,255,.5)}
+  .appnav .ntl .now b{top:0;color:#08101f;background:#fff}
+  .appnav .ntl .hdm{top:13px;height:33px;border-left:2px dashed #ff5a5f;margin-left:-1px;z-index:2}
+  .appnav .ntl .hdm{top:0;height:46px}
+  .appnav .ntl .hdm b{top:0;color:#fff;background:#d9434a}
+  .appnav .ntl .hdm.bot b{top:auto;bottom:-6px}
+  .appnav .ntl .wk{position:absolute;right:0;top:0;font-size:10px;color:#f5b942;font-weight:700;letter-spacing:.5px}
+  @media (max-width:1400px){.appnav .ntl{width:74%}}
+  @media (max-width:1100px){.appnav .ntl{width:100%}.appnav .ntl-cap{display:none}.appnav .ntl .sg .tm{display:none}}
   @media (max-width:600px){
-    .appnav .in{padding:0 12px;gap:6px}
-    .appnav .nb .w{display:none}                 /* phones: logo only, so the clock fits beside the fixed 220px Menu button */
-    .appnav .nclk{display:grid;grid-template-columns:auto;grid-auto-rows:auto;justify-content:start;row-gap:1px;gap:0;line-height:1.15}
-    .appnav .nclk .nl1{display:grid;grid-template-columns:auto auto;grid-template-areas:"t d" "c c";justify-content:start;align-items:center;column-gap:5px;row-gap:1px;min-width:0}
-    .appnav .nclk .nt{grid-area:t} .appnav .ndst.ph{grid-area:d} .appnav .nchips{grid-area:c;min-width:0;overflow:hidden}
-    .appnav .ndst:not(.ph),.appnav .nbar{display:none!important}
-    .appnav .nclk .nl2{display:block;min-width:0;overflow:hidden}
-    .appnav .nclk .nt{font-size:13px}
-    .appnav .nchips i{font-size:9px;padding:1px 4px;letter-spacing:.5px}
-    .appnav .nchips i.on{box-shadow:none}
-    .appnav .ndst.ph{font-size:0;padding:0;border:0;background:none;display:inline-flex}
-    .appnav .ndst .dd{display:block}
-    .appnav .nmm{display:none!important}
-    .appnav .ndst.mm .dd{background:#f5b942;box-shadow:0 0 5px rgba(245,185,66,.7)}
-    .appnav .ncd{display:block;font-size:11px;max-width:100%;letter-spacing:-.1px}
-    .appnav .ncd .t{font-size:11px}
+    .appnav .ntlrow{padding:2px 12px 4px}
+    .appnav .ntl .sg{font-size:9px;letter-spacing:.3px}
+    .appnav .ntl .sg.nar .lg{display:none} .appnav .ntl .sg.nar .sh{display:inline}
+    .appnav .ntl .tk{font-size:8.5px}
+    .appnav .ntl .mk b{font-size:9px;padding:0 4px}
   }
-  @media (max-width:380px){
-    .appnav .ncd,.appnav .ncd .t{font-size:10.5px;letter-spacing:-.2px}
-    .appnav .nb{font-size:18px}
-    .appnav .mb{max-width:62vw}
-    .appnav .menu{left:12px;right:12px;width:auto;top:56px}
+  @media (max-width:1000px){.appnav .nclk .nt .s,.appnav .nclk .nt .z{display:none}.appnav .ncd .lb{display:none}}
+  @media (max-width:760px){.appnav .nchips i:not(.on):not(.pre){display:none}}
+  @media (max-width:600px){
+    /* Phones: row 1 = logo + AMIT and the fixed 220px Menu button (same position as before); row 2 = slim session-clock bar.
+       The clock no longer fits beside the Menu button at 360px with explicit DST text and the NY PRE chip, so it gets its own row. */
+    .appnav .in{padding:9px 12px 0;gap:10px;height:auto;flex-wrap:wrap;row-gap:0}
+    .appnav .nb{font-size:18px;height:42px;flex:0 1 auto;min-width:0;overflow:hidden}
+    .appnav .mb{max-width:62vw;margin-left:auto}
+    .appnav .menu{left:12px;right:12px;width:auto;top:94px;max-height:calc(100vh - 104px)}
     .appnav .menu a{padding:13px 12px;font-size:16px}
+    .appnav .nclk{order:3;flex:0 0 calc(100% + 24px);box-sizing:border-box;height:30px;margin:9px -12px 0;padding:0 12px;border-top:1px solid #1f2f4d;
+      background:#0b1528;justify-content:center;gap:10px;font-size:12px}
+    .appnav .nclk .nt{font-size:14px}
+    .appnav .nclk .nt .z{display:inline;font-size:9px;margin-left:3px}
+    .appnav .ndst.ph{display:none!important}
+    .appnav .ndst{font-size:10px;padding:1px 6px;letter-spacing:.5px}
+    .appnav .ncd{font-size:12px}
+    .appnav .nchips i{font-size:10px;padding:1px 6px;letter-spacing:.6px}
+    .appnav .nchips i.on{box-shadow:none}
+  }
+  @media (max-width:400px){
+    .appnav .nclk{gap:7px}
+    .appnav .ndst{padding:1px 5px;letter-spacing:.3px}
   }
 </style>
 <nav class="appnav" aria-label="AMIT">
   <div class="in">
     <a class="nb" href="index.html" aria-label="AMIT Main Board"><img src="logo.png" alt=""><span class="w">AMIT</span></a>
     <div class="nclk" aria-label="Session clock (SAST)">
-      <span class="nl1"><span class="nt"><span class="hm">--:--</span><span class="s"></span><span class="z">SAST</span></span><span class="ndst ph"><span class="dd"></span></span><span class="nchips"><i data-k="a">Asia</i><i data-k="l">LDN</i><i data-k="n">NY</i></span><span class="nbar" aria-hidden="true"></span><span class="ndst"><span class="dd"></span><span class="tx"></span></span><span class="nmm" hidden>DST mismatch</span></span>
+      <span class="nl1"><span class="nt"><span class="hm">--:--</span><span class="s"></span><span class="z">SAST</span></span><span class="ndst ph"></span><span class="nchips"><i data-k="a">Asia</i><i data-k="l">LDN</i><i data-k="n">NY</i></span><span class="ndst pc"></span></span>
       <span class="nl2"><span class="ncd"></span></span>
     </div>
     <script type="application/json" class="nclk-data">[{"name": "Collins", "at": "2026-10-09T22:00:00+02:00"}, {"name": "CPI", "at": "2026-10-14T14:30:00+02:00"}, {"name": "FOMC", "at": "2026-10-28T20:00:00+02:00"}]</script>
     <button class="mb" type="button" aria-haspopup="true" aria-expanded="false"><span class="bars"><span></span><span></span><span></span></span><span class="ml">Menu</span><span class="cur">News · MIKE</span></button>
     <ul class="menu" role="menu"><li><a class="home" href="index.html" role="menuitem"><span class="sec">Main Board</span></a></li><li class="sep"></li><li class="hd">Staff</li><li><a class="" href="macro.html" role="menuitem"><span class="dot"></span><span class="sec">Macro</span><b>ATLAS</b></a></li><li><a class="" href="rates.html" role="menuitem"><span class="dot"></span><span class="sec">Rates</span><b>ROXY</b></a></li><li><a class="" href="fx.html" role="menuitem"><span class="dot"></span><span class="sec">FX</span><b>DINERO</b></a></li><li><a class="" href="equities.html" role="menuitem"><span class="dot"></span><span class="sec">Equities</span><b>EMILY</b></a></li><li><a class="" href="liquidity.html" role="menuitem"><span class="dot"></span><span class="sec">Liquidity</span><b>LISA</b></a></li><li><a class="" href="crypto.html" role="menuitem"><span class="dot"></span><span class="sec">Crypto</span><b>CRYPTIC</b></a></li><li><a class="" href="commodities.html" role="menuitem"><span class="dot"></span><span class="sec">Commodities</span><b>CRUDE</b></a></li><li><a class="on" href="news.html" role="menuitem"><span class="dot"></span><span class="sec">News</span><b>MIKE</b></a></li><li><a class="" href="cross-asset.html" role="menuitem"><span class="dot"></span><span class="sec">Cross-Asset</span><b>NEXUS</b></a></li><li><a class="" href="quant.html" role="menuitem"><span class="dot"></span><span class="sec">Quant</span><b>MAT</b></a></li></ul>
   </div>
+  <div class="ntlrow" aria-label="Today's trading sessions in SAST"><div class="ntl"><span class="ntl-cap">Sessions<br>SAST</span><div class="ntl-tr"></div></div></div>
 </nav>
 <script>
 (function(){var n=document.currentScript.previousElementSibling,b=n.querySelector('.mb');
@@ -215,7 +243,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
 </script>
 <script>
 /* Nav session clock (live, SAST). DST from the date: UK BST = last Sun Mar..last Sun Oct (01:00 UTC); US EDT = 2nd Sun Mar 07:00 UTC..1st Sun Nov 06:00 UTC.
-   Sessions in SAST: Asia (Tokyo) 02:00-08:00; London 09:00-17:30 (BST) / 10:00-18:30 (GMT); NY cash 15:30-22:00 (EDT) / 16:30-23:00 (EST).
+   Sessions in SAST: Asia (Tokyo) 02:00-08:00; NY Pre-market 14:00-15:30 (EDT) / 15:00-16:30 (EST); London 09:00-17:30 (BST) / 10:00-18:30 (GMT); NY cash 15:30-22:00 (EDT) / 16:30-23:00 (EST).
    Countdown to the next timed HARD event of the day's brief (events[].at). The nav is hidden under webdriver, so this never shows on the PNG. */
 (function(){
   var c=document.querySelector('.appnav .nclk'); if(!c||navigator.webdriver) return;
@@ -234,27 +262,47 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
   function draw(){
     var now=Date.now(),d=S(now),y=d.getUTCFullYear(),hrs=d.getUTCHours()+d.getUTCMinutes()/60+d.getUTCSeconds()/3600,wk=d.getUTCDay()%6===0;
     var bst=on(Date.UTC(y,2,lastSun(y,2),1),Date.UTC(y,9,lastSun(y,9),1),now), edt=on(Date.UTC(y,2,nthSun(y,2,2),7),Date.UTC(y,10,nthSun(y,10,1),6),now);
-    var ses={a:[2,8],l:bst?[9,17.5]:[10,18.5],n:edt?[15.5,22]:[16.5,23]}, NM={a:'Asia (Tokyo)',l:'London',n:'NY cash'};
+    var ses={a:[2,8],l:bst?[9,17.5]:[10,18.5],p:edt?[14,15.5]:[15,16.5],n:edt?[15.5,22]:[16.5,23]}, NM={a:'Asia (Tokyo)',l:'London',p:'NY Pre-market',n:'NY cash'};
     function t2(h){return p2(Math.floor(h))+':'+p2(Math.round(h%1*60));}
     q('.hm').textContent=hm(now); q('.s').textContent=':'+p2(d.getUTCSeconds());
     var open=[];
     [].forEach.call(c.querySelectorAll('.nchips i'),function(i){var k=i.getAttribute('data-k'),r=ses[k],o=!wk&&hrs>=r[0]&&hrs<r[1];
-      i.classList.toggle('on',o); if(o)open.push(NM[k]); i.title=NM[k]+' '+t2(r[0])+'–'+t2(r[1])+' SAST'+(o?' · open':'');});
-    var ds0=now-hrs*H, bar='';
-    ['a','l','n'].forEach(function(k){var r=ses[k],o=!wk&&hrs>=r[0]&&hrs<r[1];bar+='<span class="sg '+k+(o?' on':'')+'" style="left:'+(r[0]/24*100)+'%;width:'+((r[1]-r[0])/24*100)+'%"></span>';});
-    HARD.forEach(function(x){if(x.t>=ds0&&x.t<ds0+24*H)bar+='<span class="hd" style="left:'+((x.t-ds0)/H/24*100)+'%"></span>';});
-    bar+='<span class="nw" style="left:'+(hrs/24*100)+'%"></span>';
-    var nb=q('.nbar'); nb.innerHTML=bar; nb.title='Sessions today (SAST) · now '+hm(now)+(wk?' · weekend':'');
-    var mm=bst!==edt, dst=q('.ndst:not(.ph)'), dph=q('.ndst.ph');
-    q('.ndst .tx').textContent=(bst?'BST':'GMT')+' · '+(edt?'EDT':'EST');
-    dst.classList.toggle('mm',mm); dph.classList.toggle('mm',mm);
+      var pre=k==='n'&&!wk&&hrs>=ses.p[0]&&hrs<ses.p[1];        /* one NY chip: amber 'NY PRE' in pre-market, blue 'NY' in cash hours, dim otherwise */
+      i.classList.toggle('on',o); i.classList.toggle('pre',pre); if(k==='n')i.textContent=pre?'NY PRE':'NY';
+      if(o)open.push(NM[k]); if(pre)open.push(NM.p);
+      i.title=(k==='n'?'NY Pre-market '+t2(ses.p[0])+'–'+t2(ses.p[1])+' · NY cash ':NM[k]+' ')+t2(r[0])+'–'+t2(r[1])+' SAST'+(pre?' · pre-market live':o?' · open':' · closed');});
+    var ds0=now-hrs*H, tl=document.querySelector('.appnav .ntl-tr');
+    if(tl){
+      var LB={a:['Asia','Asia'],l:['London','LDN'],p:['NY Pre','Pre'],n:['NY','NY']}, pc=function(h){return (h/24*100)+'%';};
+      var edge=function(v){return v>92?' r':(v<8?' l':'');};
+      var lane=function(keys){return keys.map(function(k){var r=ses[k],o=!wk&&hrs>=r[0]&&hrs<r[1];
+        var pre=k==='p'&&o;
+        return '<span class="sg'+(pre?' pre':o?' on':'')+((r[1]-r[0])<3?' nar':'')+'" style="left:'+pc(r[0])+';width:'+pc(r[1]-r[0])+'" title="'+NM[k]+' '+t2(r[0])+'–'+t2(r[1])+' SAST'+(o?' · open':' · closed')+'">'+
+          '<span class="lg">'+LB[k][0]+'</span><span class="sh">'+LB[k][1]+'</span><span class="tm">'+t2(r[0])+'–'+t2(r[1])+'</span></span>';}).join('');};
+      var h='';
+      for(var g=3;g<24;g+=3) h+='<span class="gl" style="left:'+pc(g)+'"></span>';
+      h+='<div class="ln l1">'+lane(['a','l'])+'</div><div class="ln l2">'+lane(['p','n'])+'</div>';
+      [0,3,6,9,12,15,18,21,24].forEach(function(t){h+='<span class="tk'+(t===0?' s':t===24?' e':'')+'" style="left:'+pc(t)+'">'+p2(t)+'</span>';});
+      var np=hrs/24*100;
+      HARD.forEach(function(x){if(x.t>=ds0&&x.t<ds0+24*H){var v=(x.t-ds0)/H/24*100;
+        h+='<span class="mk hdm'+edge(v)+'" style="left:'+v+'%" title="HARD: '+esc(x.n)+' '+hm(x.t)+' SAST"><b>'+esc(x.n)+' '+hm(x.t)+'</b></span>';}});
+      h+='<span class="mk now'+edge(np)+'" style="left:'+np+'%"><b>NOW '+hm(now)+'</b></span>';
+      if(wk) h+='<span class="wk">Weekend · markets closed</span>';
+      tl.innerHTML=h;
+      /* HARD label sits on the top row with NOW; if the two labels would touch, drop the HARD label to the bottom (over the hour ticks) */
+      var nb=tl.querySelector('.now b'); [].forEach.call(tl.querySelectorAll('.hdm'),function(m){var a=m.querySelector('b').getBoundingClientRect(),b=nb.getBoundingClientRect();
+        if(a.left<b.right+6&&a.right>b.left-6)m.classList.add('bot');});
+    }
+    var mm=bst!==edt, dst=q('.ndst.pc'), dph=q('.ndst.ph');
+    dst.textContent=mm?'DST: MISMATCH':(bst?'DST: ON':'DST: OFF'); dph.textContent=mm?'DST MISMATCH':(bst?'DST ON':'DST OFF');
+    [dst,dph].forEach(function(x){x.classList.toggle('mm',mm);x.classList.toggle('off',!mm&&!bst);});
     dph.title=dst.title='UK: '+(bst?'BST (summer)':'GMT (winter)')+' · US: '+(edt?'EDT (summer)':'EST (winter)')+(mm?' · DST mismatch: London–NY open gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(ses.n[0]-ses.l[0])+' (normally 6h30)':'');
-    var f=q('.nmm'); f.hidden=!mm; f.title=dst.title;
     var live=null,nx=null; HARD.forEach(function(x){if(now>=x.t-2*M&&now<x.t+30*M)live=x;else if(x.t>now&&(!nx||x.t<nx.t))nx=x;});
     var cd=q('.ncd'); cd.className='ncd'+(live?' live':'');
-    if(live){cd.innerHTML='<em>HARD</em><b>LIVE</b> '+esc(live.n);cd.title='LIVE / just passed: '+live.n+' '+hm(live.t)+' SAST';}
-    else if(nx){cd.innerHTML='<em>HARD</em><b>'+esc(nx.n)+'</b> <span class="t">'+(innerWidth<=600?dur(nx.t-now).replace(' ',''):dur(nx.t-now))+'</span>';cd.title='Next HARD: '+nx.n+', '+ds(nx.t)+' '+hm(nx.t)+' SAST';}
-    else {cd.innerHTML='<em>HARD</em>none timed';cd.title='No upcoming timed HARD event in this brief';}
+    var ph=innerWidth<=600;
+    if(live){cd.innerHTML='<span class="lb">HARD: </span><b>'+esc(live.n)+'</b> <span class="t">LIVE / just passed</span>';cd.title='LIVE / just passed: '+live.n+' '+hm(live.t)+' SAST';}
+    else if(nx){cd.innerHTML='<span class="lb">Next HARD: </span><b>'+esc(nx.n)+'</b> in <span class="t">'+dur(nx.t-now)+'</span>';cd.title='Next HARD: '+nx.n+', '+ds(nx.t)+' '+hm(nx.t)+' SAST';}
+    else {cd.innerHTML=ph?'No HARD left':'No timed HARD event left';cd.title='No upcoming timed HARD event in this brief';}
     c.title='SAST '+hm(now)+' · '+(open.length?open.join(', ')+' open':'No main session open');
   }
   draw(); setInterval(draw,1000);
