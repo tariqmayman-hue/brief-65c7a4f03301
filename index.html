@@ -244,6 +244,103 @@
   .cr .na3{color:var(--dim);font-size:16px;font-style:italic;text-align:right}
   .a-cmd .note{margin-top:6px;font-size:20px;line-height:1.3}
   .a-cmd .csrc{color:var(--dim);font-size:15px;margin-top:6px;line-height:1.3}
+
+  /* ===================================================================================================
+     PHONE LAYOUT (<= 900px CSS width): real single-column responsive layout, no zoom.
+     Never affects the PNG card (rendered at 1440px) or the PC view (> 900px keeps the 1440 design + fit/zoom).
+     =================================================================================================== */
+  @media (max-width:900px){
+    html,body{overflow-x:hidden}
+    body{width:auto;font-size:16px;line-height:1.45}
+    .wrap{padding:14px 12px 22px}
+    /* banner */
+    .banner{flex-direction:column;align-items:stretch;gap:12px;padding-bottom:14px;margin-bottom:14px}
+    .brand{font-size:30px;flex-wrap:wrap;row-gap:2px}
+    .brand .bar{margin:0 8px}
+    .brand .sub{font-size:14px!important}
+    .meta{font-size:15px}
+    .headline{font-size:17px;margin-top:8px}
+    .banner-right{text-align:left;display:flex;align-items:center;gap:12px}
+    .banner-right .lbl{margin:0;font-size:12px}
+    .tone{font-size:16px;padding:6px 14px}
+    /* grid: 2 columns; tiles full width, compact KPIs 2 per row */
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .grid .panel{grid-column:1 / -1}
+    .a-futvix,.a-stack{display:contents}
+    .grid .a-ust{grid-column:span 1;order:1}
+    .grid .a-vix{grid-column:span 1;order:1}
+    .a-regime,.a-bias,.a-oil{order:0}
+    .a-fut{order:2} .a-lvl{order:3}
+    .a-ev,.a-drv,.a-yday,.a-fed,.a-cx,.a-cr,.a-desk,.a-inv,.a-bl{order:4}
+    .panel{padding:14px 14px;border-radius:12px;min-width:0}
+    .ph{font-size:13px;letter-spacing:1.5px;margin-bottom:8px}
+    .ph .src{font-size:12px}
+    .note{font-size:14px}
+    /* gauge */
+    .gauge svg{max-width:240px!important}
+    .gauge .call{font-size:24px}
+    /* KPI tiles */
+    .kpi .k{font-size:14px}
+    .kpi .v,.a-oil .v,.a-vix .v{font-size:24px}
+    .kpi .chg,.a-vix .chg{font-size:14px}
+    .kpi .row{gap:8px;flex-wrap:wrap}
+    .a-ust .row .k{display:flex;flex-direction:column;gap:0}
+    .kpi .big,.a-fut .big{font-size:28px;white-space:normal}
+    .a-fut .st .sv{font-size:18px}
+    /* bias */
+    .bias .idx,.a-bias .bias .idx{font-size:20px}
+    .bias .tick{font-size:12px}
+    .pill{font-size:13px;padding:4px 10px}
+    .bias .why{font-size:14px}
+    /* commodities */
+    .cr{grid-template-columns:minmax(0,1fr) auto 64px;gap:8px;padding:5px 0}
+    .cr .cn{font-size:16px}
+    .cr .cv{font-size:19px}
+    .cr .cc{font-size:14px}
+    .a-cmd .note{font-size:14px}
+    .a-cmd .csrc{font-size:12px}
+    /* levels table: horizontal scroll with a sticky instrument column */
+    .a-lvl table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+    .a-lvl th{font-size:11px;padding:4px 8px 8px}
+    .a-lvl th .s{font-size:10px}
+    .a-lvl td{font-size:15px;padding:10px 8px;letter-spacing:0}
+    .a-lvl td.ins{font-size:15px;position:sticky;left:0;background:var(--panel);z-index:1}
+    .a-lvl th:first-child{position:sticky;left:0;background:var(--panel);z-index:1}
+    .a-lvl td.na2{font-size:12px}
+    /* event timeline: time | tag over description */
+    .ev{grid-template-columns:62px minmax(0,1fr);grid-template-areas:"t g" "t d";column-gap:12px;row-gap:4px;padding:10px 0}
+    .ev > :nth-child(1){grid-area:t}
+    .ev > :nth-child(2){grid-area:g}
+    .ev > :nth-child(3){grid-area:d}
+    .ev .t{font-size:17px}
+    .ev .t small{font-size:11px}
+    .tag{width:auto;padding:2px 8px;font-size:11px;letter-spacing:1px}
+    .ev .d b{font-size:16px}
+    .ev .d span{font-size:14px}
+    .grp{font-size:12px}
+    .legend{font-size:12px}
+    .callout{font-size:15px;padding:10px 12px}
+    .callout .cl{font-size:12px}
+    /* lists, stats, text panels */
+    ul.b li{font-size:15px;padding-left:16px;margin:6px 0}
+    ul.b li:before{top:9px;width:7px;height:7px}
+    .na{font-size:14px}
+    .stats,.a-fut .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+    .a-fut .stats{display:grid}
+    .st{padding:8px 10px}
+    .st .sl{font-size:11px}
+    .st .sv{font-size:19px}
+    .st .sc{font-size:14px}
+    .st .sn{font-size:12px}
+    .sub{font-size:12px}
+    .inval p{font-size:16px}
+    .desk{grid-template-columns:1fr}
+    .dn.wide{grid-column:auto}
+    .dn .dt{font-size:16px}
+    .dn ul.b li{font-size:15px}
+    .foot{flex-direction:column;gap:6px;font-size:12px}
+    .foot span{white-space:normal}
+  }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
@@ -252,7 +349,9 @@
 /* Fit-to-width: scales the dashboard (.wrap) only, so the app nav above it stays at native size. Off under webdriver (PNG render). */
 if(navigator.webdriver)document.documentElement.classList.add('wd');
 (function(){function fit(){if(navigator.webdriver)return;var w=document.documentElement.clientWidth,b=document.body,d=document.querySelector('.wrap');if(!b||!d)return;
-b.style.width='auto';if(w<1100){d.style.width='1440px';d.style.zoom=(w/1440);}else{d.style.zoom=0.85;d.style.width=(w/0.85)+'px';}}
+b.style.width='auto';
+if(w<=900){d.style.zoom='';d.style.width='';}                          /* phones: real responsive layout (CSS @media), no zoom */
+else if(w<1100){d.style.width='1440px';d.style.zoom=(w/1440);}else{d.style.zoom=0.85;d.style.width=(w/0.85)+'px';}}
 window.addEventListener('resize',fit);document.addEventListener('DOMContentLoaded',fit);})();
 </script>
 
@@ -493,7 +592,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);}
     </section>
     <section class="panel a-bl inval">
       <div class="ph">Bottom line</div>
-      <p>Boss, today is a Friday. Your focus days are Tue-Thu, so only take a full-alignment setup: HTF bias, a level, and a 1H swing-failure (SFP) at it, then 5M entry. The regime is Neutral: a relief bounce on lower oil and an AI rebound, with the 10Y still near 5.24% and Fed hikes priced. Stay out right before Collins (22:00 SAST, HARD), take min 2R only, one trade and done, and be flat by session end. The next big HARD event is CPI on Wed 14 Oct at 14:30 SAST.</p>
+      <p>Boss, the regime is Neutral: a relief bounce on lower oil and an AI rebound, with the 10Y still near 5.24% and Fed hikes priced. Wait for a 1H swing-failure (SFP) at a level, then a 5M entry; min 2R, one trade and done. Stay out right before Collins (22:00 SAST, HARD) and be flat by session end. The next big HARD event is CPI on Wed 14 Oct at 14:30 SAST.</p>
     </section>
   </div>
 
