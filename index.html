@@ -120,7 +120,8 @@
   .wrap{padding:44px 44px 32px}
   .a-regime,.a-oil,.a-ust,.a-fut{grid-column:span 3}
   .a-bias{grid-column:span 5}
-  .a-lvl{grid-column:span 7}
+  .a-lvl{grid-column:span 6}
+  .a-oil{grid-column:span 4}
   .a-ev,.a-drv{grid-column:span 6}
   .a-lvl td{font-size:24px;padding:12px 6px}
   .a-lvl th{padding:6px 6px 10px}
@@ -184,6 +185,10 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
       </svg>
       <div class="call risk-off">Risk-Off</div>
     </section>
+    <section class="panel a-bias span4">
+      <div class="ph">Index bias</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div class="bias"><div class="idx">Dow<span class="tick">US30</span></div><span class="pill bearish">Bearish</span><div class="why">Weakest index†</div></div><div class="bias"><div class="idx">Nasdaq<span class="tick">NAS100</span></div><span class="pill bearish">Bearish</span><div class="why">Soft on AI-funding jitters†</div></div><div class="bias"><div class="idx">S&amp;P<span class="tick">SPX</span></div><span class="pill bearish">Bearish</span></div></div>
+    </section>
 
     <section class="panel a-oil span2 kpi">
       <div class="ph">Oil</div>
@@ -198,25 +203,17 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
       <div class="row"><span class="k">30Y</span><span class="v mono">5.71%</span></div>
       <div class="note">Long end near 24-year highs.† Fed hike risk stays live into the 30Y auction and Musalem.†</div>
     </section>
-
-    <!-- ===== Row 2: Futures KPI + bias tiles ===== -->
-    <section class="panel a-fut span2 kpi">
-      <div class="ph">Index futures</div>
-      <div class="big mono down">−0.4% to −1%</div>
-      <div class="note">US index futures lower pre-market; Dow the weakest.†</div>
-    </section>
-    <section class="panel a-bias span4">
-      <div class="ph">Index bias</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"><div class="bias"><div class="idx">Dow<span class="tick">US30</span></div><span class="pill bearish">Bearish</span><div class="why">Weakest index†</div></div><div class="bias"><div class="idx">Nasdaq<span class="tick">NAS100</span></div><span class="pill bearish">Bearish</span><div class="why">Soft on AI-funding jitters†</div></div><div class="bias"><div class="idx">S&amp;P<span class="tick">SPX</span></div><span class="pill bearish">Bearish</span></div></div>
-    </section>
-
-    <!-- ===== Row 3: Levels + Event timeline ===== -->
     <section class="panel a-lvl span6">
       <div class="ph">Key levels <span class="src">TradingView T1 · Wed 7 Oct daily</span></div>
       <table class="mono">
         <thead><tr><th>Instrument</th><th>Open</th><th>High<span class="s">PDH</span></th><th>Low<span class="s">PDL</span></th><th>Close<span class="s">PDC</span></th></tr></thead>
         <tbody><tr><td class="ins">US30</td><td>51,521.82</td><td>51,534.57</td><td>50,868.42</td><td>51,106.32</td></tr><tr><td class="ins">NAS100</td><td>31,284.93</td><td>31,305.13</td><td>30,928.58</td><td>31,190.08</td></tr><tr><td class="ins">SPX</td><td>7,792.98</td><td>7,807.02</td><td>7,763.34</td><td>7,801.77</td></tr></tbody>
       </table>
+    </section>
+    <section class="panel a-fut span2 kpi">
+      <div class="ph">Index futures</div>
+      <div class="big mono down">−0.4% to −1%</div>
+      <div class="note">US index futures lower pre-market; Dow the weakest.†</div>
     </section>
 
     <section class="panel a-ev span6">
