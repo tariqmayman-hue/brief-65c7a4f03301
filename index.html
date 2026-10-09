@@ -190,6 +190,23 @@
   .anim.rm #splash .ln{animation:none;width:220px}
   .anim.rm .banner,.anim.rm .panel,.anim.rm .foot{transform:none}
   .anim.rm.reveal .banner,.anim.rm.reveal .panel,.anim.rm.reveal .foot{animation:fadeIn .3s ease forwards;animation-delay:0s}
+
+  /* ===== VIX tile (stacked under Index futures in row 2) ===== */
+  .a-futvix{grid-column:span 3;display:flex;flex-direction:column;gap:18px}
+  .a-futvix .panel{flex:1 1 auto}
+  .a-vix .row{margin-top:2px}
+  .a-vix .v{font-size:40px}
+  .a-vix .chg{font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+  .bear{color:var(--bear)} .bull{color:var(--bull)}
+  /* compact Asia stats inside the futures tile so Futures + VIX stack to roughly the Key-levels height */
+  .a-fut .big{font-size:38px}
+  .a-fut .note{margin-top:6px}
+  .a-fut .stats{display:flex;gap:14px;margin:4px 0 0;flex-wrap:wrap}
+  .a-fut .st{background:none;border:none;padding:0;display:flex;align-items:baseline;gap:8px}
+  .a-fut .st .sl{font-size:15px;white-space:nowrap;letter-spacing:.5px}
+  .a-fut .st .sv{font-size:24px}
+  .a-vix .ph{margin-bottom:6px}
+  .a-vix .note{margin-top:6px}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style id="fitcss">html,body{margin:0}</style>
@@ -286,12 +303,19 @@ window.addEventListener('resize',fit);document.addEventListener('DOMContentLoade
       </table>
       <div class="note">US30 is already trading below its prior-day low, and NAS100 is just above its own.</div>
     </section>
+    <!-- Futures + VIX share the right-hand column of row 2 (stacked) -->
+    <div class="stack a-futvix">
     <section class="panel a-fut span2 kpi">
       <div class="ph">Index futures</div>
       <div class="big mono down">−0.4% to −1%</div>
       <div class="note">Asia closed lower:</div>
       <div class="stats" style="--n:2"><div class="st"><div class="sl">Nikkei</div><div class="sv">−1.4%</div></div><div class="st"><div class="sl">Hang Seng</div><div class="sv">−2.1%</div></div></div>
     </section>
+    <section class="panel a-vix kpi">
+      <div class="ph">VIX</div>
+      <div class="row"><span class="k">Level <span class="chg bear">Rising</span></span><span class="v mono">~16</span></div><div class="note">Rising with oil and yields; supports the risk-off call.</div>
+    </section>
+    </div>
 
     <!-- ===== Row 3: Catalysts timeline (left) | Drivers, Yesterday, What's priced in (right stack) ===== -->
     <section class="panel a-ev">
