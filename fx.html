@@ -137,8 +137,57 @@
   .appnav .menu a.nr{color:#7d8ba6}
   .appnav .menu a.nr .dot{background:#3a4866}
   .appnav .menu a.home{font-weight:700;color:#e8eef8}
+
+  /* ===== Compact session clock in the nav (between brand and Menu). The Menu button keeps its fixed width/position. ===== */
+  html:not(.wd) .a-clock{display:none}            /* the board's big clock strip is only for the PNG / nav-less card */
+  .appnav .nclk{flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:12px;overflow:hidden;white-space:nowrap;font-size:13px;color:#8fa1bf}
+  .appnav .mb{margin-left:0}
+  .appnav .nclk .nt{font-family:"IBM Plex Mono",ui-monospace,monospace;color:#e8eef8;font-size:17px;font-weight:700;letter-spacing:-.3px;flex:none}
+  .appnav .nclk .nt .s{color:#8fa1bf;font-size:13px;font-weight:600}
+  .appnav .nclk .nt .z{color:#5f7193;font-size:11px;font-weight:600;letter-spacing:1px;margin-left:4px}
+  .appnav .nclk .nl1,.appnav .nclk .nl2{display:contents}
+  .appnav .nchips{display:flex;gap:4px;flex:none}
+  .appnav .nchips i{font-style:normal;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid #1f2f4d;color:#5f7193;background:#0d182c}
+  .appnav .nchips i.on{color:#06202e;background:#4cc3ff;border-color:#4cc3ff;box-shadow:0 0 8px rgba(76,195,255,.45)}
+  .appnav .nbar{position:relative;width:132px;height:20px;flex:none;border-radius:4px;background:#0d182c;border:1px solid #1f2f4d}
+  .appnav .nbar .sg{position:absolute;height:4px;border-radius:2px;background:rgba(76,195,255,.35)}
+  .appnav .nbar .sg.on{background:#4cc3ff}
+  .appnav .nbar .sg.a{top:3px} .appnav .nbar .sg.l{top:8px} .appnav .nbar .sg.n{top:13px}
+  .appnav .nbar .hd{position:absolute;top:1px;bottom:1px;border-left:1px dashed #ff5a5f}
+  .appnav .nbar .nw{position:absolute;top:-2px;bottom:-2px;width:2px;margin-left:-1px;background:#fff;border-radius:1px;box-shadow:0 0 4px rgba(255,255,255,.7)}
+  .appnav .ndst{font-size:11px;font-weight:700;letter-spacing:.8px;color:#c9d2e3;border:1px solid #1f2f4d;border-radius:5px;padding:2px 7px;background:#0d182c;flex:none}
+  .appnav .ndst.ph{display:none}
+  .appnav .ndst .dd{display:none;width:7px;height:7px;border-radius:50%;background:#5f7193}
+  .appnav .nmm{font-size:11px;font-weight:700;color:#1b1300;background:#f5b942;border-radius:5px;padding:2px 7px;flex:none}
+  .appnav .nmm[hidden]{display:none}
+  .appnav .ncd{font-size:13px;color:#8fa1bf;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .appnav .ncd em{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:1px;color:#ff5a5f;border:1px solid rgba(255,90,95,.6);border-radius:4px;padding:1px 5px;margin-right:6px}
+  .appnav .ncd b{color:#e8eef8;font-weight:700}
+  .appnav .ncd .t{color:#e8eef8;font-weight:600;font-variant-numeric:tabular-nums}
+  .appnav .ncd.live b,.appnav .ncd.live .t{color:#ff5a5f}
+  @media (max-width:1240px){.appnav .nbar{display:none}}
+  @media (max-width:1000px){.appnav .nclk .nt .s,.appnav .nclk .nt .z{display:none}.appnav .nmm{font-size:0;padding:0;width:8px;height:8px;border-radius:50%}}
+  @media (max-width:760px){.appnav .nchips i:not(.on){display:none}.appnav .ncd em{display:none}}
   @media (max-width:600px){
-    .appnav .in{padding:0 12px;gap:10px}
+    .appnav .in{padding:0 12px;gap:6px}
+    .appnav .nb .w{display:none}                 /* phones: logo only, so the clock fits beside the fixed 220px Menu button */
+    .appnav .nclk{display:grid;grid-template-columns:auto;grid-auto-rows:auto;justify-content:start;row-gap:1px;gap:0;line-height:1.15}
+    .appnav .nclk .nl1{display:grid;grid-template-columns:auto auto;grid-template-areas:"t d" "c c";justify-content:start;align-items:center;column-gap:5px;row-gap:1px;min-width:0}
+    .appnav .nclk .nt{grid-area:t} .appnav .ndst.ph{grid-area:d} .appnav .nchips{grid-area:c;min-width:0;overflow:hidden}
+    .appnav .ndst:not(.ph),.appnav .nbar{display:none!important}
+    .appnav .nclk .nl2{display:block;min-width:0;overflow:hidden}
+    .appnav .nclk .nt{font-size:13px}
+    .appnav .nchips i{font-size:9px;padding:1px 4px;letter-spacing:.5px}
+    .appnav .nchips i.on{box-shadow:none}
+    .appnav .ndst.ph{font-size:0;padding:0;border:0;background:none;display:inline-flex}
+    .appnav .ndst .dd{display:block}
+    .appnav .nmm{display:none!important}
+    .appnav .ndst.mm .dd{background:#f5b942;box-shadow:0 0 5px rgba(245,185,66,.7)}
+    .appnav .ncd{display:block;font-size:11px;max-width:100%;letter-spacing:-.1px}
+    .appnav .ncd .t{font-size:11px}
+  }
+  @media (max-width:380px){
+    .appnav .ncd,.appnav .ncd .t{font-size:10.5px;letter-spacing:-.2px}
     .appnav .nb{font-size:18px}
     .appnav .mb{max-width:62vw}
     .appnav .menu{left:12px;right:12px;width:auto;top:56px}
@@ -147,7 +196,12 @@
 </style>
 <nav class="appnav" aria-label="AMIT">
   <div class="in">
-    <a class="nb" href="index.html"><img src="logo.png" alt="">AMIT</a>
+    <a class="nb" href="index.html" aria-label="AMIT Main Board"><img src="logo.png" alt=""><span class="w">AMIT</span></a>
+    <div class="nclk" aria-label="Session clock (SAST)">
+      <span class="nl1"><span class="nt"><span class="hm">--:--</span><span class="s"></span><span class="z">SAST</span></span><span class="ndst ph"><span class="dd"></span></span><span class="nchips"><i data-k="a">Asia</i><i data-k="l">LDN</i><i data-k="n">NY</i></span><span class="nbar" aria-hidden="true"></span><span class="ndst"><span class="dd"></span><span class="tx"></span></span><span class="nmm" hidden>DST mismatch</span></span>
+      <span class="nl2"><span class="ncd"></span></span>
+    </div>
+    <script type="application/json" class="nclk-data">[{"name": "Collins", "at": "2026-10-09T22:00:00+02:00"}, {"name": "CPI", "at": "2026-10-14T14:30:00+02:00"}, {"name": "FOMC", "at": "2026-10-28T20:00:00+02:00"}]</script>
     <button class="mb" type="button" aria-haspopup="true" aria-expanded="false"><span class="bars"><span></span><span></span><span></span></span><span class="ml">Menu</span><span class="cur">FX · DINERO</span></button>
     <ul class="menu" role="menu"><li><a class="home" href="index.html" role="menuitem"><span class="sec">Main Board</span></a></li><li class="sep"></li><li class="hd">Staff</li><li><a class="" href="macro.html" role="menuitem"><span class="dot"></span><span class="sec">Macro</span><b>ATLAS</b></a></li><li><a class="" href="rates.html" role="menuitem"><span class="dot"></span><span class="sec">Rates</span><b>ROXY</b></a></li><li><a class="on" href="fx.html" role="menuitem"><span class="dot"></span><span class="sec">FX</span><b>DINERO</b></a></li><li><a class="" href="equities.html" role="menuitem"><span class="dot"></span><span class="sec">Equities</span><b>EMILY</b></a></li><li><a class="" href="liquidity.html" role="menuitem"><span class="dot"></span><span class="sec">Liquidity</span><b>LISA</b></a></li><li><a class="" href="crypto.html" role="menuitem"><span class="dot"></span><span class="sec">Crypto</span><b>CRYPTIC</b></a></li><li><a class="" href="commodities.html" role="menuitem"><span class="dot"></span><span class="sec">Commodities</span><b>CRUDE</b></a></li><li><a class="" href="news.html" role="menuitem"><span class="dot"></span><span class="sec">News</span><b>MIKE</b></a></li><li><a class="" href="cross-asset.html" role="menuitem"><span class="dot"></span><span class="sec">Cross-Asset</span><b>NEXUS</b></a></li><li><a class="" href="quant.html" role="menuitem"><span class="dot"></span><span class="sec">Quant</span><b>MAT</b></a></li></ul>
   </div>
@@ -158,6 +212,53 @@ function set(o){n.classList.toggle('open',o);b.setAttribute('aria-expanded',o);}
 b.addEventListener('click',function(e){e.stopPropagation();set(!n.classList.contains('open'));});
 document.addEventListener('click',function(e){if(!n.contains(e.target))set(false);});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();
+</script>
+<script>
+/* Nav session clock (live, SAST). DST from the date: UK BST = last Sun Mar..last Sun Oct (01:00 UTC); US EDT = 2nd Sun Mar 07:00 UTC..1st Sun Nov 06:00 UTC.
+   Sessions in SAST: Asia (Tokyo) 02:00-08:00; London 09:00-17:30 (BST) / 10:00-18:30 (GMT); NY cash 15:30-22:00 (EDT) / 16:30-23:00 (EST).
+   Countdown to the next timed HARD event of the day's brief (events[].at). The nav is hidden under webdriver, so this never shows on the PNG. */
+(function(){
+  var c=document.querySelector('.appnav .nclk'); if(!c||navigator.webdriver) return;
+  var H=3600e3,M=60e3,HARD=[];
+  try{HARD=JSON.parse(document.querySelector('.appnav .nclk-data').textContent).map(function(x){return {n:x.name,t:Date.parse(x.at)};});}catch(e){}
+  var D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function S(ms){return new Date(ms+2*H);} function p2(n){return (n<10?'0':'')+n;}
+  function hm(ms){var d=S(ms);return p2(d.getUTCHours())+':'+p2(d.getUTCMinutes());}
+  function ds(ms){var d=S(ms);return D[d.getUTCDay()]+' '+d.getUTCDate()+' '+MO[d.getUTCMonth()];}
+  function lastSun(y,m){var d=new Date(Date.UTC(y,m+1,0));return d.getUTCDate()-d.getUTCDay();}
+  function nthSun(y,m,n){var f=new Date(Date.UTC(y,m,1)).getUTCDay();return 1+(7-f)%7+7*(n-1);}
+  function on(a,b,now){return now>=a&&now<b;}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch];});}
+  function dur(ms){var m=Math.max(0,Math.round(ms/M)),d=Math.floor(m/1440),h=Math.floor(m%1440/60),mm=m%60;return d?d+'d '+h+'h':(h?h+'h '+p2(mm)+'m':mm+'m');}
+  var q=function(s){return c.querySelector(s);};
+  function draw(){
+    var now=Date.now(),d=S(now),y=d.getUTCFullYear(),hrs=d.getUTCHours()+d.getUTCMinutes()/60+d.getUTCSeconds()/3600,wk=d.getUTCDay()%6===0;
+    var bst=on(Date.UTC(y,2,lastSun(y,2),1),Date.UTC(y,9,lastSun(y,9),1),now), edt=on(Date.UTC(y,2,nthSun(y,2,2),7),Date.UTC(y,10,nthSun(y,10,1),6),now);
+    var ses={a:[2,8],l:bst?[9,17.5]:[10,18.5],n:edt?[15.5,22]:[16.5,23]}, NM={a:'Asia (Tokyo)',l:'London',n:'NY cash'};
+    function t2(h){return p2(Math.floor(h))+':'+p2(Math.round(h%1*60));}
+    q('.hm').textContent=hm(now); q('.s').textContent=':'+p2(d.getUTCSeconds());
+    var open=[];
+    [].forEach.call(c.querySelectorAll('.nchips i'),function(i){var k=i.getAttribute('data-k'),r=ses[k],o=!wk&&hrs>=r[0]&&hrs<r[1];
+      i.classList.toggle('on',o); if(o)open.push(NM[k]); i.title=NM[k]+' '+t2(r[0])+'–'+t2(r[1])+' SAST'+(o?' · open':'');});
+    var ds0=now-hrs*H, bar='';
+    ['a','l','n'].forEach(function(k){var r=ses[k],o=!wk&&hrs>=r[0]&&hrs<r[1];bar+='<span class="sg '+k+(o?' on':'')+'" style="left:'+(r[0]/24*100)+'%;width:'+((r[1]-r[0])/24*100)+'%"></span>';});
+    HARD.forEach(function(x){if(x.t>=ds0&&x.t<ds0+24*H)bar+='<span class="hd" style="left:'+((x.t-ds0)/H/24*100)+'%"></span>';});
+    bar+='<span class="nw" style="left:'+(hrs/24*100)+'%"></span>';
+    var nb=q('.nbar'); nb.innerHTML=bar; nb.title='Sessions today (SAST) · now '+hm(now)+(wk?' · weekend':'');
+    var mm=bst!==edt, dst=q('.ndst:not(.ph)'), dph=q('.ndst.ph');
+    q('.ndst .tx').textContent=(bst?'BST':'GMT')+' · '+(edt?'EDT':'EST');
+    dst.classList.toggle('mm',mm); dph.classList.toggle('mm',mm);
+    dph.title=dst.title='UK: '+(bst?'BST (summer)':'GMT (winter)')+' · US: '+(edt?'EDT (summer)':'EST (winter)')+(mm?' · DST mismatch: London–NY open gap '+(function(g){return Math.floor(g)+'h'+(g%1?p2(Math.round(g%1*60)):'');})(ses.n[0]-ses.l[0])+' (normally 6h30)':'');
+    var f=q('.nmm'); f.hidden=!mm; f.title=dst.title;
+    var live=null,nx=null; HARD.forEach(function(x){if(now>=x.t-2*M&&now<x.t+30*M)live=x;else if(x.t>now&&(!nx||x.t<nx.t))nx=x;});
+    var cd=q('.ncd'); cd.className='ncd'+(live?' live':'');
+    if(live){cd.innerHTML='<em>HARD</em><b>LIVE</b> '+esc(live.n);cd.title='LIVE / just passed: '+live.n+' '+hm(live.t)+' SAST';}
+    else if(nx){cd.innerHTML='<em>HARD</em><b>'+esc(nx.n)+'</b> <span class="t">'+(innerWidth<=600?dur(nx.t-now).replace(' ',''):dur(nx.t-now))+'</span>';cd.title='Next HARD: '+nx.n+', '+ds(nx.t)+' '+hm(nx.t)+' SAST';}
+    else {cd.innerHTML='<em>HARD</em>none timed';cd.title='No upcoming timed HARD event in this brief';}
+    c.title='SAST '+hm(now)+' · '+(open.length?open.join(', ')+' open':'No main session open');
+  }
+  draw(); setInterval(draw,1000);
+})();
 </script>
 
 <main class="page">
